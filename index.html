@@ -2,62 +2,139 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Volleyball</title>
+  <title>Volleyball Association</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #1e90ff, #00c6ff);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       color: white;
     }
 
-    .container {
+    /* NAV BAR */
+    .navbar {
+      background: #1f3556;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 40px;
+    }
+
+    .nav-left,
+    .nav-right {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .logo {
+      font-size: 36px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    .signup {
+      background: #e53935;
+      padding: 8px 16px;
+      border-radius: 20px;
+    }
+
+    .login {
+      background: #7a8ca5;
+      padding: 8px 16px;
+      border-radius: 20px;
+    }
+
+    /* HERO */
+    .hero {
+      height: calc(100vh - 80px);
+      background: 
+        linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
+        url("hero.jpg") center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      background: rgba(0,0,0,0.2);
       padding: 40px;
-      border-radius: 16px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
     }
 
-    img {
-      max-width: 250px;
+    .hero-content {
+      max-width: 900px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
       margin-bottom: 20px;
+      letter-spacing: 1px;
     }
 
-    h1 {
-      margin-bottom: 20px;
+    .hero p {
+      font-size: 22px;
+      line-height: 1.5;
+      opacity: 0.95;
     }
 
-    .btn {
-      padding: 14px 30px;
+    .hero-btn {
+      margin-top: 30px;
+      padding: 14px 32px;
       font-size: 18px;
       background: white;
-      color: #1e90ff;
+      color: #1f3556;
       border: none;
       border-radius: 30px;
       cursor: pointer;
-      text-decoration: none;
       font-weight: bold;
     }
 
-    .btn:hover {
+    .hero-btn:hover {
       background: #f0f0f0;
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <img src="centerimage.png" alt="Volleyball" />
-    <h1>Welcome to the Volleyball Page</h1>
 
-    <a href="events.html" class="btn">EVENTS</a>
+  <!-- NAV BAR -->
+  <div class="navbar">
+    <div class="nav-left">
+      <a href="#">RATINGS</a>
+      <a href="#">JUNIORS</a>
+      <a href="events.html">EVENTS</a>
+    </div>
+
+    <div class="logo">VBVA</div>
+
+    <div class="nav-right">
+      <a href="#">FAQ</a>
+      <a href="#">SEARCH</a>
+      <a href="#" class="login">LOG IN</a>
+      <a href="#" class="signup">SIGN UP</a>
+    </div>
   </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1>CALIFORNIA’S HOME FOR COMPETITIVE VOLLEYBALL</h1>
+      <p>
+        Founded to bring together athletes of all skill levels,
+        our volleyball community hosts high-quality events,
+        leagues, and tournaments across the state.
+      </p>
+
+      <button class="hero-btn" onclick="location.href='events.html'">
+        VIEW EVENTS
+      </button>
+    </div>
+  </div>
+
 </body>
 </html>
