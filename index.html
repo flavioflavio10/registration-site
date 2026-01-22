@@ -12,13 +12,15 @@
       color: white;
     }
 
-    /* NAV BAR */
+    /* NAV BAR (LOCKED HEIGHT) */
     .navbar {
       background: #87CEEB;
+      height: 80px;                 /* 🔒 fixed height */
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 28px;
+      padding: 0 28px;              /* remove vertical padding */
+      overflow: visible;            /* allow logo to overflow */
     }
 
     .nav-left,
@@ -35,19 +37,21 @@
       letter-spacing: 0.5px;
     }
 
-    /* LOGO IMAGE (2x bigger) */
+    /* LOGO IMAGE (BIG, DOES NOT AFFECT NAV HEIGHT) */
     .logo-img {
       height: 140px;
       width: auto;
       display: block;
+      margin-top: 30px;             /* visually center it */
     }
 
-    /* NAV BUTTON STYLE (EVENTS + CONTACT) */
+    /* NAV BUTTON STYLE */
     .nav-btn,
     .contact-btn {
       background: rgba(255,255,255,0.18);
       padding: 10px 16px;
       border-radius: 20px;
+      white-space: nowrap;
     }
 
     .nav-btn:hover,
@@ -57,7 +61,7 @@
 
     /* HERO */
     .hero {
-      height: calc(100vh - 80px);
+      height: calc(100vh - 80px);   /* matches navbar height */
       background:
         linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
         url("hero.jpg") center/cover no-repeat;
