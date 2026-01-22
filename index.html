@@ -35,19 +35,22 @@
       letter-spacing: 0.5px;
     }
 
-    /* LOGO IMAGE */
+    /* LOGO IMAGE (2x bigger) */
     .logo-img {
-      height: 44px;
+      height: 88px;
       width: auto;
       display: block;
     }
 
+    /* NAV BUTTON STYLE (EVENTS + CONTACT) */
+    .nav-btn,
     .contact-btn {
       background: rgba(255,255,255,0.18);
       padding: 10px 16px;
       border-radius: 20px;
     }
 
+    .nav-btn:hover,
     .contact-btn:hover {
       background: rgba(255,255,255,0.28);
     }
@@ -81,15 +84,15 @@
       opacity: 0.95;
     }
 
-    /* BIGGER VIEW EVENTS BUTTON */
+    /* BIG VIEW EVENTS BUTTON */
     .hero-btn {
       margin-top: 34px;
-      padding: 20px 54px;     /* bigger */
-      font-size: 22px;        /* bigger text */
+      padding: 20px 54px;
+      font-size: 22px;
       background: white;
       color: #1f3556;
       border: none;
-      border-radius: 40px;    /* rounder */
+      border-radius: 40px;
       cursor: pointer;
       font-weight: bold;
     }
@@ -105,16 +108,13 @@
   <!-- NAV BAR -->
   <div class="navbar">
     <div class="nav-left">
-      <!-- Top-left logo -->
       <a href="index.html">
         <img src="logo.png" alt="Logo" class="logo-img" />
       </a>
 
-      <!-- Keep EVENTS -->
-      <a href="events.html">EVENTS</a>
+      <a href="events.html" class="nav-btn">EVENTS</a>
     </div>
 
-    <!-- Contact button on the right -->
     <div class="nav-right">
       <a href="contact.html" class="contact-btn">CONTACT INFO</a>
     </div>
