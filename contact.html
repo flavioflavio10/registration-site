@@ -74,7 +74,7 @@
 
     .hero-content {
       width: 100%;
-      max-width: 1050px;
+      max-width: 980px;
     }
 
     .hero h1 {
@@ -89,11 +89,11 @@
       line-height: 1.6;
       opacity: 0.95;
       text-align: center;
-      max-width: 900px;
-      margin: 0 auto 22px;
+      max-width: 820px;
+      margin: 0 auto 20px;
     }
 
-    /* CARD STYLES */
+    /* SIMPLE CARD */
     .card {
       background: rgba(0,0,0,0.55);
       border: 1px solid rgba(255,255,255,0.16);
@@ -105,33 +105,14 @@
 
     .grid {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
+      grid-template-columns: 1fr 1fr;
       gap: 18px;
-      margin-top: 18px;
-    }
-
-    .section {
-      margin-top: 18px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(255,255,255,0.14);
-    }
-
-    .section:first-of-type {
-      margin-top: 0;
-      padding-top: 0;
-      border-top: none;
     }
 
     h2 {
       margin: 0 0 10px;
       font-size: 22px;
       letter-spacing: 0.5px;
-    }
-
-    h3 {
-      margin: 12px 0 8px;
-      font-size: 18px;
-      opacity: 0.95;
     }
 
     p {
@@ -141,45 +122,24 @@
     }
 
     ul {
-      margin: 10px 0 0 20px;
+      margin: 10px 0 0 18px;
       padding: 0;
       line-height: 1.7;
     }
 
     li { margin: 8px 0; }
 
-    /* INFO ROWS */
     .info-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 10px 12px;
+      margin-top: 12px;
+      padding: 12px 14px;
       border-radius: 12px;
       background: rgba(255,255,255,0.10);
       border: 1px solid rgba(255,255,255,0.14);
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-
-    .label {
-      font-weight: 700;
-      letter-spacing: 0.3px;
-      opacity: 0.95;
-    }
-
-    .value {
-      opacity: 0.95;
-    }
-
-    /* BUTTONS */
-    .btn-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 16px;
+      line-height: 1.6;
     }
 
     .hero-btn {
+      margin-top: 14px;
       padding: 14px 22px;
       font-size: 16px;
       background: white;
@@ -194,21 +154,9 @@
       background: #f0f0f0;
     }
 
-    /* FOOTER NOTE */
-    .note {
-      margin-top: 18px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.10);
-      border: 1px solid rgba(255,255,255,0.14);
-      line-height: 1.6;
-    }
-
-    /* --- MOBILE FIXES (PUT THIS AT THE VERY BOTTOM) --- */
+    /* --- MOBILE FIXES --- */
     @media (max-width: 900px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
+      .grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 700px) {
@@ -262,9 +210,7 @@
         border-radius: 16px;
       }
 
-      h2 {
-        font-size: 20px;
-      }
+      h2 { font-size: 20px; }
     }
   </style>
 </head>
@@ -284,127 +230,53 @@
     </div>
   </div>
 
-  <!-- HERO BACKGROUND + ABOUT CONTENT -->
+  <!-- HERO + ABOUT -->
   <div class="hero">
     <div class="hero-content">
-      <h1>ABOUT 530VOLLEYBALL</h1>
+      <h1>ABOUT</h1>
       <p class="lead">
-        [Replace this with your short mission statement — who you are, what you host, and the vibe.]
+        [Replace this with 1–2 short sentences about your mission / vibe.]
       </p>
 
       <div class="grid">
 
-        <!-- LEFT: MAIN ABOUT -->
+        <!-- LEFT CARD -->
         <div class="card">
-          <div class="section">
-            <h2>Who We Are</h2>
-            <p>
-              [Write 3–5 sentences about your volleyball community. Example: We host grass and sand events in Redding, CA.
-              Our focus is competitive games, fair formats, and a fun environment for all levels.]
-            </p>
-          </div>
+          <h2>What We Do</h2>
+          <p>
+            [Short paragraph: what you host, where, and what people can expect.]
+          </p>
 
-          <div class="section">
-            <h2>What We Host</h2>
-            <ul>
-              <li>[Grass doubles tournaments]</li>
-              <li>[Reverse coed events]</li>
-              <li>[Triples / quads (when scheduled)]</li>
-              <li>[Leagues / drop-ins / special events]</li>
-            </ul>
-          </div>
+          <ul>
+            <li>[Grass tournaments]</li>
+            <li>[Sand tournaments]</li>
+            <li>[Reverse coed + doubles]</li>
+          </ul>
 
-          <div class="section">
-            <h2>Our Vibe</h2>
-            <ul>
-              <li><strong>Competitive:</strong> [fast-paced matches, solid rules, refs/director help]</li>
-              <li><strong>Community:</strong> [meet new players, bring friends, good sportsmanship]</li>
-              <li><strong>Organized:</strong> [clear brackets, on-time starts, consistent formats]</li>
-            </ul>
-          </div>
-
-          <div class="section">
-            <h2>How to Join</h2>
-            <p>
-              [Explain how people register. Example: Check the Events page for upcoming tournaments and sign up with your partner/team.
-              If you need a partner, message us and we’ll try to connect you with someone.]
-            </p>
-
-            <div class="btn-row">
-              <button class="hero-btn" onclick="location.href='events.html'">VIEW EVENTS</button>
-              <button class="hero-btn" onclick="location.href='rules.html'">READ RULES</button>
-            </div>
-          </div>
-
-          <div class="note">
-            <strong>Note:</strong> [Add any quick note here — refunds policy, weather policy, what to bring, or start times.]
-          </div>
+          <button class="hero-btn" onclick="location.href='events.html'">
+            VIEW EVENTS
+          </button>
         </div>
 
-        <!-- RIGHT: DETAILS / CONTACT INFO -->
+        <!-- RIGHT CARD -->
         <div class="card">
-          <div class="section">
-            <h2>Quick Info</h2>
+          <h2>Quick Info</h2>
 
-            <div class="info-row">
-              <div class="label">Location</div>
-              <div class="value">[Redding, CA]</div>
-            </div>
-
-            <div class="info-row">
-              <div class="label">Primary Surfaces</div>
-              <div class="value">[Grass • Sand]</div>
-            </div>
-
-            <div class="info-row">
-              <div class="label">Typical Format</div>
-              <div class="value">[Doubles • Reverse Coed]</div>
-            </div>
-
-            <div class="info-row">
-              <div class="label">Skill Level</div>
-              <div class="value">[Beginner–Advanced (describe yours)]</div>
-            </div>
+          <div class="info-row">
+            <strong>Location:</strong> [Redding, CA]
           </div>
 
-          <div class="section">
-            <h2>Contact</h2>
-            <p>
-              [Replace with your contact details. If you don’t want to show your email, use Instagram only.]
-            </p>
-
-            <div class="info-row">
-              <div class="label">Email</div>
-              <div class="value">[youremail@example.com]</div>
-            </div>
-
-            <div class="info-row">
-              <div class="label">Instagram</div>
-              <div class="value">[@530volleyball]</div>
-            </div>
-
-            <div class="info-row">
-              <div class="label">Text</div>
-              <div class="value">[(xxx) xxx-xxxx]</div>
-            </div>
-
-            <div class="btn-row">
-              <button class="hero-btn" onclick="location.href='index.html'">HOME</button>
-              <button class="hero-btn" onclick="location.href='events.html'">EVENTS</button>
-            </div>
+          <div class="info-row">
+            <strong>Season:</strong> [Spring–Fall / Year-round]
           </div>
 
-          <div class="section">
-            <h2>FAQ (Dummy)</h2>
-            <h3>Do you allow walk-ups?</h3>
-            <p>[Answer here — ex: “Only if a team drops and we have space.”]</p>
-
-            <h3>What should I bring?</h3>
-            <p>[Answer here — ex: “Water, chair, sunscreen, and a good attitude.”]</p>
-
-            <h3>What if it rains?</h3>
-            <p>[Answer here — ex: “We’ll post updates the morning of the event.”]</p>
+          <div class="info-row">
+            <strong>Contact:</strong> [Instagram @___ or email ___]
           </div>
+
+          <button class="hero-btn" onclick="location.href='rules.html'">
+            READ RULES
+          </button>
         </div>
 
       </div>
