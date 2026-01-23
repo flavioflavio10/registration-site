@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>530Volleyball | About</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    /* NAV BAR (LOCKED HEIGHT) */
+    .navbar {
+      background: #040d6e;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      overflow: visible;
+    }
+
+    .nav-left,
+    .nav-right {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* LOGO IMAGE */
+    .logo-img {
+      height: 100px;
+      width: auto;
+      display: block;
+      margin-top: 15px;
+    }
+
+    /* NAV BUTTON STYLE */
+    .nav-btn,
+    .contact-btn {
+      background: rgba(255,255,255,0.18);
+      padding: 10px 16px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .nav-btn:hover,
+    .contact-btn:hover {
+      background: rgba(255,255,255,0.28);
+    }
+
+    /* HERO (same background as index) */
+    .hero {
+      min-height: calc(100vh - 100px);
+      background:
+        linear-gradient(rgba(0,0,0,0.50), rgba(0,0,0,0.50)),
+        url("hero.jpg") center/cover no-repeat;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 18px;
+      box-sizing: border-box;
+    }
+
+    .hero-content {
+      width: 100%;
+      max-width: 1050px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      margin: 0 0 10px;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    .hero p.lead {
+      font-size: 18px;
+      line-height: 1.6;
+      opacity: 0.95;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto 22px;
+    }
+
+    /* CARD STYLES */
+    .card {
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      backdrop-filter: blur(4px);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .section {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .section:first-of-type {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      letter-spacing: 0.5px;
+    }
+
+    h3 {
+      margin: 12px 0 8px;
+      font-size: 18px;
+      opacity: 0.95;
+    }
+
+    p {
+      margin: 8px 0;
+      line-height: 1.7;
+      opacity: 0.95;
+    }
+
+    ul {
+      margin: 10px 0 0 20px;
+      padding: 0;
+      line-height: 1.7;
+    }
+
+    li { margin: 8px 0; }
+
+    /* INFO ROWS */
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.14);
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .label {
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      opacity: 0.95;
+    }
+
+    .value {
+      opacity: 0.95;
+    }
+
+    /* BUTTONS */
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .hero-btn {
+      padding: 14px 22px;
+      font-size: 16px;
+      background: white;
+      color: #1f3556;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .hero-btn:hover {
+      background: #f0f0f0;
+    }
+
+    /* FOOTER NOTE */
+    .note {
+      margin-top: 18px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.14);
+      line-height: 1.6;
+    }
+
+    /* --- MOBILE FIXES (PUT THIS AT THE VERY BOTTOM) --- */
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .navbar {
+        height: auto;
+        padding: 12px 14px;
+        align-items: flex-start;
+        gap: 10px;
+        flex-wrap: wrap;
+        overflow: visible;
+      }
+
+      .nav-left {
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .nav-right {
+        width: 100%;
+        justify-content: flex-start;
+        margin-top: 6px;
+      }
+
+      .logo-img {
+        height: 56px;
+        margin-top: 0;
+      }
+
+      .nav-btn,
+      .contact-btn {
+        padding: 8px 12px;
+        border-radius: 16px;
+        font-size: 14px;
+      }
+
+      .hero {
+        padding: 26px 14px;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .hero p.lead {
+        font-size: 16px;
+      }
+
+      .card {
+        padding: 16px;
+        border-radius: 16px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV BAR (same as index.html) -->
+  <div class="navbar">
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="logo.png" alt="Logo" class="logo-img" />
+      </a>
+
+      <a href="index.html" class="nav-btn">HOME</a>
+      <a href="about.html" class="contact-btn">ABOUT</a>
+      <a href="rules.html" class="nav-btn">RULES</a>
+    </div>
+  </div>
+
+  <!-- HERO BACKGROUND + ABOUT CONTENT -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1>ABOUT 530VOLLEYBALL</h1>
+      <p class="lead">
+        [Replace this with your short mission statement — who you are, what you host, and the vibe.]
+      </p>
+
+      <div class="grid">
+
+        <!-- LEFT: MAIN ABOUT -->
+        <div class="card">
+          <div class="section">
+            <h2>Who We Are</h2>
+            <p>
+              [Write 3–5 sentences about your volleyball community. Example: We host grass and sand events in Redding, CA.
+              Our focus is competitive games, fair formats, and a fun environment for all levels.]
+            </p>
+          </div>
+
+          <div class="section">
+            <h2>What We Host</h2>
+            <ul>
+              <li>[Grass doubles tournaments]</li>
+              <li>[Reverse coed events]</li>
+              <li>[Triples / quads (when scheduled)]</li>
+              <li>[Leagues / drop-ins / special events]</li>
+            </ul>
+          </div>
+
+          <div class="section">
+            <h2>Our Vibe</h2>
+            <ul>
+              <li><strong>Competitive:</strong> [fast-paced matches, solid rules, refs/director help]</li>
+              <li><strong>Community:</strong> [meet new players, bring friends, good sportsmanship]</li>
+              <li><strong>Organized:</strong> [clear brackets, on-time starts, consistent formats]</li>
+            </ul>
+          </div>
+
+          <div class="section">
+            <h2>How to Join</h2>
+            <p>
+              [Explain how people register. Example: Check the Events page for upcoming tournaments and sign up with your partner/team.
+              If you need a partner, message us and we’ll try to connect you with someone.]
+            </p>
+
+            <div class="btn-row">
+              <button class="hero-btn" onclick="location.href='events.html'">VIEW EVENTS</button>
+              <button class="hero-btn" onclick="location.href='rules.html'">READ RULES</button>
+            </div>
+          </div>
+
+          <div class="note">
+            <strong>Note:</strong> [Add any quick note here — refunds policy, weather policy, what to bring, or start times.]
+          </div>
+        </div>
+
+        <!-- RIGHT: DETAILS / CONTACT INFO -->
+        <div class="card">
+          <div class="section">
+            <h2>Quick Info</h2>
+
+            <div class="info-row">
+              <div class="label">Location</div>
+              <div class="value">[Redding, CA]</div>
+            </div>
+
+            <div class="info-row">
+              <div class="label">Primary Surfaces</div>
+              <div class="value">[Grass • Sand]</div>
+            </div>
+
+            <div class="info-row">
+              <div class="label">Typical Format</div>
+              <div class="value">[Doubles • Reverse Coed]</div>
+            </div>
+
+            <div class="info-row">
+              <div class="label">Skill Level</div>
+              <div class="value">[Beginner–Advanced (describe yours)]</div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h2>Contact</h2>
+            <p>
+              [Replace with your contact details. If you don’t want to show your email, use Instagram only.]
+            </p>
+
+            <div class="info-row">
+              <div class="label">Email</div>
+              <div class="value">[youremail@example.com]</div>
+            </div>
+
+            <div class="info-row">
+              <div class="label">Instagram</div>
+              <div class="value">[@530volleyball]</div>
+            </div>
+
+            <div class="info-row">
+              <div class="label">Text</div>
+              <div class="value">[(xxx) xxx-xxxx]</div>
+            </div>
+
+            <div class="btn-row">
+              <button class="hero-btn" onclick="location.href='index.html'">HOME</button>
+              <button class="hero-btn" onclick="location.href='events.html'">EVENTS</button>
+            </div>
+          </div>
+
+          <div class="section">
+            <h2>FAQ (Dummy)</h2>
+            <h3>Do you allow walk-ups?</h3>
+            <p>[Answer here — ex: “Only if a team drops and we have space.”]</p>
+
+            <h3>What should I bring?</h3>
+            <p>[Answer here — ex: “Water, chair, sunscreen, and a good attitude.”]</p>
+
+            <h3>What if it rains?</h3>
+            <p>[Answer here — ex: “We’ll post updates the morning of the event.”]</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
