@@ -15,12 +15,12 @@
     /* NAV BAR (LOCKED HEIGHT) */
     .navbar {
       background: #040d6e;
-      height: 100px;                 /* 🔒 fixed height */
+      height: 100px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 28px;              /* remove vertical padding */
-      overflow: visible;            /* allow logo to overflow */
+      padding: 0 28px;
+      overflow: visible;
     }
 
     .nav-left,
@@ -37,12 +37,12 @@
       letter-spacing: 0.5px;
     }
 
-    /* LOGO IMAGE (BIG, DOES NOT AFFECT NAV HEIGHT) */
+    /* LOGO IMAGE */
     .logo-img {
       height: 100px;
       width: auto;
       display: block;
-      margin-top: 15px;             /* visually center it */
+      margin-top: 15px;
     }
 
     /* NAV BUTTON STYLE */
@@ -61,7 +61,7 @@
 
     /* HERO */
     .hero {
-      height: calc(100vh - 80px);   /* matches navbar height */
+      height: calc(100vh - 100px);  /* matches navbar height (100px) */
       background:
         linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
         url("hero.jpg") center/cover no-repeat;
@@ -104,31 +104,84 @@
     .hero-btn:hover {
       background: #f0f0f0;
     }
+
+    /* --- MOBILE FIXES (PUT THIS AT THE VERY BOTTOM) --- */
+    @media (max-width: 700px) {
+      .navbar {
+        height: auto;
+        padding: 12px 14px;
+        align-items: flex-start;
+        gap: 10px;
+        flex-wrap: wrap;
+        overflow: visible;
+      }
+
+      .nav-left {
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .nav-right {
+        width: 100%;
+        justify-content: flex-start;
+        margin-top: 6px;
+      }
+
+      .logo-img {
+        height: 56px;
+        margin-top: 0;
+      }
+
+      .nav-btn,
+      .contact-btn {
+        padding: 8px 12px;
+        border-radius: 16px;
+        font-size: 14px;
+      }
+
+      /* optional: give the hero a little more breathing room on phones */
+      .hero {
+        height: auto;
+        min-height: calc(100vh - 100px);
+        padding: 30px 18px;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .hero p {
+        font-size: 18px;
+      }
+
+      .hero-btn {
+        padding: 16px 36px;
+        font-size: 18px;
+      }
+    }
   </style>
 </head>
 
 <body>
 
   <!-- NAV BAR -->
-<div class="navbar">
-  <div class="nav-left">
-    <!-- Logo -->
-    <a href="index.html">
-      <img src="logo.png" alt="Logo" class="logo-img" />
-    </a>
+  <div class="navbar">
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="logo.png" alt="Logo" class="logo-img" />
+      </a>
 
-    <!-- Nav buttons in order -->
-    <a href="index.html" class="nav-btn">HOME</a>
-    <a href="events.html" class="nav-btn">EVENTS</a>
-    <a href="rules.html" class="nav-btn">RULES</a>
-    <a href="gallery.html" class="nav-btn">GALLERY</a>
+      <a href="index.html" class="nav-btn">HOME</a>
+      <a href="events.html" class="nav-btn">EVENTS</a>
+      <a href="rules.html" class="nav-btn">RULES</a>
+      <a href="gallery.html" class="nav-btn">GALLERY</a>
+    </div>
+
+    <div class="nav-right">
+      <a href="contact.html" class="contact-btn">ABOUT</a>
+    </div>
   </div>
-
-  <div class="nav-right">
-    <a href="contact.html" class="contact-btn">ABOUT</a>
-  </div>
-</div>
-
 
   <!-- HERO -->
   <div class="hero">
