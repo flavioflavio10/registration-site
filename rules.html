@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>530Volleyball | Rules</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    /* NAV BAR (LOCKED HEIGHT) */
+    .navbar {
+      background: #040d6e;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      overflow: visible;
+    }
+
+    .nav-left,
+    .nav-right {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* LOGO IMAGE */
+    .logo-img {
+      height: 100px;
+      width: auto;
+      display: block;
+      margin-top: 15px;
+    }
+
+    /* NAV BUTTON STYLE */
+    .nav-btn,
+    .contact-btn {
+      background: rgba(255,255,255,0.18);
+      padding: 10px 16px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .nav-btn:hover,
+    .contact-btn:hover {
+      background: rgba(255,255,255,0.28);
+    }
+
+    /* HERO (same background as index) */
+    .hero {
+      min-height: calc(100vh - 100px);
+      background:
+        linear-gradient(rgba(0,0,0,0.50), rgba(0,0,0,0.50)),
+        url("hero.jpg") center/cover no-repeat;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 18px;
+      box-sizing: border-box;
+    }
+
+    .hero-content {
+      width: 100%;
+      max-width: 980px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      margin: 0 0 14px;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    .hero p.lead {
+      font-size: 18px;
+      line-height: 1.6;
+      opacity: 0.95;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto 22px;
+    }
+
+    /* RULES CARD */
+    .rules-card {
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 18px;
+      padding: 22px 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      backdrop-filter: blur(4px);
+    }
+
+    .section {
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .section:first-of-type {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 22px;
+      letter-spacing: 0.5px;
+    }
+
+    h3 {
+      margin: 14px 0 8px;
+      font-size: 18px;
+      opacity: 0.95;
+    }
+
+    ul {
+      margin: 10px 0 0 20px;
+      padding: 0;
+      line-height: 1.65;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    .note {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.14);
+      line-height: 1.6;
+    }
+
+    .contact-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 18px;
+    }
+
+    .hero-btn {
+      padding: 14px 22px;
+      font-size: 16px;
+      background: white;
+      color: #1f3556;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .hero-btn:hover {
+      background: #f0f0f0;
+    }
+
+    /* --- MOBILE FIXES (PUT THIS AT THE VERY BOTTOM) --- */
+    @media (max-width: 700px) {
+      .navbar {
+        height: auto;
+        padding: 12px 14px;
+        align-items: flex-start;
+        gap: 10px;
+        flex-wrap: wrap;
+        overflow: visible;
+      }
+
+      .nav-left {
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .nav-right {
+        width: 100%;
+        justify-content: flex-start;
+        margin-top: 6px;
+      }
+
+      .logo-img {
+        height: 56px;
+        margin-top: 0;
+      }
+
+      .nav-btn,
+      .contact-btn {
+        padding: 8px 12px;
+        border-radius: 16px;
+        font-size: 14px;
+      }
+
+      .hero {
+        padding: 26px 14px;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .hero p.lead {
+        font-size: 16px;
+      }
+
+      .rules-card {
+        padding: 16px;
+        border-radius: 16px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV BAR (same as index.html) -->
+  <div class="navbar">
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="logo.png" alt="Logo" class="logo-img" />
+      </a>
+
+      <a href="index.html" class="nav-btn">HOME</a>
+      <a href="contact.html" class="contact-btn">ABOUT</a>
+      <a href="rules.html" class="nav-btn">RULES</a>
+    </div>
+  </div>
+
+  <!-- HERO BACKGROUND + RULES CONTENT -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1>RULES</h1>
+      <p class="lead">
+        Our goal is to keep one consistent rulebook across all 530Volleyball events.
+        Rules evolve over time, but we also keep a few traditional grass + doubles + reverse coed standards.
+        Below are the key rules and the most important reminders.
+      </p>
+
+      <div class="rules-card">
+
+        <div class="section">
+          <h2>Facilities, Equipment, and Match Format</h2>
+
+          <h3>Court Size</h3>
+          <ul>
+            <li><strong>Doubles:</strong> 27' x 27' on each side of the net.</li>
+            <li><strong>Triples &amp; Quads:</strong> 30' x 30' on each side of the net.</li>
+          </ul>
+
+          <h3>Out-of-Court Play Near Other Courts</h3>
+          <ul>
+            <li>A ball can be chased outside the lines, including toward nearby courts.</li>
+            <li>If any player steps into <strong>another court’s playing area</strong>, the rally ends immediately and that team loses the point.</li>
+          </ul>
+
+          <h3>Scoring, Switching, Warm-Ups</h3>
+          <ul>
+            <li>Matches use <strong>rally scoring</strong> unless the event listing says otherwise.</li>
+            <li>Teams switch sides:
+              <ul>
+                <li>Games to <strong>21+</strong>: switch every <strong>7 total points</strong>.</li>
+                <li>Games to <strong>15</strong>: switch every <strong>5 total points</strong>.</li>
+              </ul>
+            </li>
+            <li>Warm-ups should be quick: <strong>max 4 minutes per team</strong> to keep courts on schedule.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Playing Actions</h2>
+
+          <ul>
+            <li><strong>Let serves are legal</strong> (a serve that clips the net and goes over is playable).</li>
+
+            <li><strong>Serve receive rule:</strong> on the first contact after a serve, <strong>overhand setting is a fault</strong>.
+              If you play the ball with two hands, keep hands together and avoid a setting action.</li>
+
+            <li>A <strong>hard-driven</strong> ball can be played with a momentary double contact as long as it is not a “set-like” action.</li>
+          </ul>
+
+          <h3>Setting (Called Tighter Than Modern Rules)</h3>
+          <ul>
+            <li>We expect cleaner hand contact than many modern formats — doubles are called <strong>strictly</strong>.</li>
+            <li>If your set feels questionable, it probably is — we encourage players to <strong>self-call</strong> doubles when appropriate.</li>
+            <li>You may choose to set on <strong>first contact after serve receive</strong> (including hard-driven balls), and the same “clean hands” standard applies on any contact number.</li>
+            <li>If your set stays on your side, your shoulders can face any direction.</li>
+            <li>If your set goes <strong>over the net</strong>, it must travel in line with your shoulders — square to your body at contact.</li>
+          </ul>
+
+          <h3>Lines, Net, and Crossing</h3>
+          <ul>
+            <li>The ball is <strong>in</strong> if it touches any part of the boundary line.</li>
+            <li><strong>Net contact is a fault</strong> and results in loss of point.</li>
+            <li>Touching the net <strong>after the rally is over</strong> is still a fault and loss of point.</li>
+            <li>Anything you’re wearing counts as part of you:
+              <ul>
+                <li>If your <strong>hat/shoes/clothing</strong> touch the net while worn, it is a fault.</li>
+                <li>If a hat falls off and hits the net while not being worn, there is <strong>no fault</strong>.</li>
+              </ul>
+            </li>
+            <li><strong>Hair</strong> may touch the net (not a fault).</li>
+            <li>You may go fully under the net onto the opponent’s side as long as you do not:
+              <ul>
+                <li>interfere with their play, or</li>
+                <li>contact any opponent.</li>
+              </ul>
+            </li>
+          </ul>
+
+          <h3>Attacking and Blocking</h3>
+          <ul>
+            <li><strong>Open-hand tips are not allowed.</strong> Knuckles are allowed.</li>
+            <li><strong>A block does not count</strong> as one of a team’s three contacts.</li>
+            <li>On an <strong>overpass</strong>, a blocker may not “steer” the ball.
+              They can:
+              <ul>
+                <li>let it naturally rebound off their hands, or</li>
+                <li>stuff it straight down.</li>
+              </ul>
+              Attacking an overpass is legal and not considered a redirection.
+            </li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Interruptions to Play</h2>
+          <ul>
+            <li><strong>Timeouts:</strong> each team gets <strong>one</strong> timeout in set 1 and set 2 (1 minute each).
+              If a 3rd set is played, each team gets <strong>one additional</strong> timeout.</li>
+
+            <li><strong>Substitutions:</strong> allowed in <strong>pool play only</strong>, and only for injury,
+              and only if the team still has at least one pool-play set remaining.
+              No subs are allowed once a team has finished all their pool-play sets.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Reverse Coed Format</h2>
+
+          <h3>Team Composition</h3>
+          <ul>
+            <li>Teams must include <strong>one player of each gender</strong>.</li>
+            <li>Two women may play together if one is clearly declared as the <strong>“guy”</strong> each set (can change between sets).</li>
+            <li>Two men as a team are <strong>not permitted</strong>.</li>
+          </ul>
+
+          <h3>Attack Line and Jumping Rules</h3>
+          <ul>
+            <li>A 10' attack line will be marked on each court.</li>
+            <li><strong>Women</strong> may jump and attack from anywhere.</li>
+            <li><strong>Men</strong> may jump and attack from <strong>behind</strong> the 10' line.</li>
+            <li>Men may jump and attack from <strong>in front</strong> of the 10' line only if the ball has a clear <strong>upward trajectory</strong>.</li>
+            <li>If a man contacts the ball <strong>above the net</strong> inside the 10' line (rare),
+              it must be done at least <strong>an arm’s length</strong> away from the net, and the return must still have an obvious upward path.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Triples and Quads Format</h2>
+          <ul>
+            <li>Teams may register an extra player:
+              <ul>
+                <li><strong>Triples:</strong> up to 4 total players</li>
+                <li><strong>Quads:</strong> up to 5 total players</li>
+              </ul>
+              The extra player is a sub and may enter <strong>between sets only</strong>. No mid-set subs unless there is an injury.
+            </li>
+
+            <li><strong>Reverse Coed Quads:</strong> typically 2 men + 2 women, but a <strong>3–1</strong> ratio is allowed either direction.</li>
+
+            <li>If a team has <strong>3 men + 1 woman</strong>:
+              <ul>
+                <li>one man must be declared the <strong>libero</strong> each set,</li>
+                <li>the libero cannot attack the ball <strong>above the net</strong> in any way (even with an upward trajectory),</li>
+                <li>standing downballs are allowed,</li>
+                <li>the libero may set from in front of the 10' line.</li>
+              </ul>
+            </li>
+
+            <li>If a team has <strong>3 women + 1 man</strong>:
+              <ul>
+                <li>one woman must be declared as the <strong>“guy”</strong> each set and must follow all men’s rules for that set.</li>
+              </ul>
+            </li>
+
+            <li>A team of <strong>4 women</strong> is allowed:
+              <ul>
+                <li>one player is designated as the “guy” for the <strong>entire tournament</strong>,</li>
+                <li>and for each set, one of the remaining three is also designated as the “guy” for that set.</li>
+              </ul>
+            </li>
+
+            <li>A team of <strong>4 men</strong> is <strong>not permitted</strong>.</li>
+          </ul>
+        </div>
+
+        <div class="note">
+          <strong>Questions?</strong> If anything is unclear, reach out through our <strong>About/Contact</strong> page and we’ll help you out.
+          Tournament directors also review key rules with teams before play begins.
+          <div class="contact-row">
+            <button class="hero-btn" onclick="location.href='contact.html'">CONTACT / ABOUT</button>
+            <button class="hero-btn" onclick="location.href='events.html'">VIEW EVENTS</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
