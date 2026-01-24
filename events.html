@@ -88,18 +88,17 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
       gap: 20px;
+      justify-items: center;
     }
 
+    /* ✅ Event card becomes a positioning wrapper (background + free-move items) */
     .event-card {
-      background: rgba(0,0,0,0.55);
-      border: 1px solid rgba(255,255,255,0.16);
-      color: white;
-      padding: 100px;
+      position: relative;
+      width: 100%;
+      box-sizing: border-box;
       border-radius: 18px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
+      overflow: hidden;
+      min-height: 520px; /* adjust card height */
       transition: transform 0.2s;
     }
 
@@ -107,10 +106,66 @@
       transform: translateY(-5px);
     }
 
-    .event-card p {
-      color: rgba(255,255,255,0.90);
+    /* ✅ Background layer (the "box") */
+    .event-bg {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 1;
     }
 
+    /* ✅ Independent, movable title */
+    .event-title {
+      position: absolute;
+      top: 110px;   /* move me */
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: white;
+      margin: 0;
+      font-size: 34px;
+      z-index: 2;
+    }
+
+    /* ✅ Independent, movable description */
+    .event-desc {
+      position: absolute;
+      top: 380px;   /* move me */
+      left: 30px;   /* move me */
+      right: 70px;  /* controls width */
+      text-align: left;
+      color: rgba(255,255,255,0.90);
+      margin: 0;
+      z-index: 2;
+      line-height: 1.3;
+      font-size: 14px;
+    }
+
+    /* ✅ Independent, movable button */
+    .event-btn {
+      position: absolute;
+      bottom: 20px; /* move me */
+      left: 70px;    /* move me */
+      width: 160px;  /* button width */
+      padding: 14px 18px;
+      background: white;
+      color: #1f3556;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 999px;
+      text-align: center;
+      z-index: 2;
+      box-sizing: border-box;
+    }
+
+    .event-btn:hover {
+      background: #f0f0f0;
+    }
 
     .back-btn {
       display: inline-block;
@@ -163,6 +218,29 @@
       .container {
         padding: 26px 16px;
       }
+
+      /* ✅ Optional mobile adjustments for positioned content */
+      .event-card {
+        min-height: 460px;
+      }
+
+      .event-title {
+        top: 90px;
+        font-size: 30px;
+      }
+
+      .event-desc {
+        top: 210px;
+        left: 40px;
+        right: 40px;
+        font-size: 16px;
+      }
+
+      .event-btn {
+        left: 40px;
+        bottom: 90px;
+        width: 240px;
+      }
     }
   </style>
 </head>
@@ -189,18 +267,28 @@
 
       <div class="events">
         <div class="event-card">
-          <h2>Event 1</h2>
-          <p>Open play volleyball session</p>
+          <div class="event-bg"></div>
+          <h2 class="event-title">Event 1</h2>
+          <p class="event-desc">
+            SPRING FEST - M/F Doubles<br>
+            Sat Mar 14th<br>
+            Tournament | Enterprise Park
+          </p>
+          <a href="#" class="event-btn">View Event</a>
         </div>
 
         <div class="event-card">
-          <h2>Event 2</h2>
-          <p>Tournament-style games</p>
+          <div class="event-bg"></div>
+          <h2 class="event-title">Event 2</h2>
+          <p class="event-desc">Tournament-style games</p>
+          <a href="#" class="event-btn">View Event</a>
         </div>
 
         <div class="event-card">
-          <h2>Event 3</h2>
-          <p>Beginner-friendly clinic</p>
+          <div class="event-bg"></div>
+          <h2 class="event-title">Event 3</h2>
+          <p class="event-desc">Beginner-friendly clinic</p>
+          <a href="#" class="event-btn">View Event</a>
         </div>
       </div>
 
