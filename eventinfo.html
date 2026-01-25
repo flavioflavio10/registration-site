@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>530Volleyball | About</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    /* NAV BAR (LOCKED HEIGHT) */
+    .navbar {
+      background: #040d6e;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      overflow: visible;
+    }
+
+    .nav-left,
+    .nav-right {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* LOGO IMAGE */
+    .logo-img {
+      height: 100px;
+      width: auto;
+      display: block;
+      margin-top: 15px;
+    }
+
+    /* NAV BUTTON STYLE */
+    .nav-btn,
+    .contact-btn {
+      background: rgba(255,255,255,0.18);
+      padding: 10px 16px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .nav-btn:hover,
+    .contact-btn:hover {
+      background: rgba(255,255,255,0.28);
+    }
+
+    /* HERO (same background as index) */
+    .hero {
+      min-height: calc(100vh - 100px);
+      background:
+        linear-gradient(rgba(0,0,0,0.50), rgba(0,0,0,0.50)),
+        url("hero.jpg") center/cover no-repeat;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 18px;
+      box-sizing: border-box;
+    }
+
+    .hero-content {
+      width: 100%;
+      max-width: 980px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      margin: 0 0 10px;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    .hero p.lead {
+      font-size: 18px;
+      line-height: 1.6;
+      opacity: 0.95;
+      text-align: center;
+      max-width: 820px;
+      margin: 0 auto 20px;
+    }
+
+    /* SIMPLE CARD */
+    .card {
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      backdrop-filter: blur(4px);
+
+      width: 100%;
+      max-width: 560px;
+    }
+
+    /* single centered card layout */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      justify-items: center;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      letter-spacing: 0.5px;
+    }
+
+    p {
+      margin: 8px 0;
+      line-height: 1.7;
+      opacity: 0.95;
+    }
+
+    .info-row {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.14);
+      line-height: 1.6;
+    }
+
+    .hero-btn {
+      margin-top: 14px;
+      padding: 14px 22px;
+      font-size: 16px;
+      background: white;
+      color: #1f3556;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .hero-btn:hover {
+      background: #f0f0f0;
+    }
+
+    /* button + counts row (THIS is what you move around) */
+    .cta-row {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      margin-left: 200px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* counts text with NO box */
+    .reg-counts {
+      font-size: 14px;
+      line-height: 1.4;
+      opacity: 0.95;
+      text-align: left;
+    }
+
+    /* --- MOBILE FIXES --- */
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 700px) {
+      .navbar {
+        height: auto;
+        padding: 12px 14px;
+        align-items: flex-start;
+        gap: 10px;
+        flex-wrap: wrap;
+        overflow: visible;
+      }
+
+      .nav-left {
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .nav-right {
+        width: 100%;
+        justify-content: flex-start;
+        margin-top: 6px;
+      }
+
+      .logo-img {
+        height: 56px;
+        margin-top: 0;
+      }
+
+      .nav-btn,
+      .contact-btn {
+        padding: 8px 12px;
+        border-radius: 16px;
+        font-size: 14px;
+      }
+
+      .hero {
+        padding: 26px 14px;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .hero p.lead {
+        font-size: 16px;
+      }
+
+      .card {
+        padding: 16px;
+        border-radius: 16px;
+        max-width: 100%;
+      }
+
+      h2 { font-size: 20px; }
+
+      .reg-counts {
+        font-size: 13px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV BAR (same as index.html) -->
+  <div class="navbar">
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="logo.png" alt="Logo" class="logo-img" />
+      </a>
+
+      <a href="index.html" class="nav-btn">HOME</a>
+      <a href="about.html" class="contact-btn">ABOUT</a>
+      <a href="rules.html" class="nav-btn">RULES</a>
+    </div>
+  </div>
+
+  <!-- HERO + ABOUT -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1>SPRING FEST</h1>
+      <p class="lead"></p>
+
+      <div class="grid">
+
+        <!-- SINGLE CENTERED CARD -->
+        <div class="card">
+          <h2></h2>
+
+          <div class="info-row">
+            <strong>SPRING FEST - M/F Doubles</strong><br>
+            <strong>Date:</strong> Saturday March 14th<br>
+            <strong>Start Time:</strong> 9:00 AM<br>
+            <strong>Location:</strong> Enterprise Park<br><br>
+
+            <strong>Format:</strong> Men’s Doubles and Women’s Doubles<br>
+            <strong>Capacity:</strong> 12 teams per gender<br>
+            <strong>Cost:</strong> $20 per player ($40 per team)<br>
+            Registration opened until Mar 13th, 12pm
+          </div>
+
+          <p style="margin-top: 12px;">
+            Questions or need a partner? Reach out and we’ll help match you up.
+          </p>
+
+          <div class="info-row">
+            <strong>Email:</strong> yourname@email.com<br>
+            <strong>Phone:</strong> (209) 408-7774
+          </div>
+
+          <!-- MOVE THIS BLOCK AROUND to position button + counts -->
+          <div class="cta-row">
+            <button class="hero-btn" onclick="location.href='register.html'">
+              REGISTER
+            </button>
+
+            <div class="reg-counts">
+              <strong></strong> <br>
+              <strong>Men Registered:</strong> 12/12<br>
+              <strong>Women Registered:</strong> 12/12
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
