@@ -101,7 +101,6 @@
       padding: 22px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.25);
       backdrop-filter: blur(4px);
-
       width: 100%;
       max-width: 560px;
     }
@@ -139,8 +138,8 @@
       margin-top: 14px;
       padding: 14px 22px;
       font-size: 16px;
-      background: white;
-      color: #1f3556;
+      background: red;
+      color: white;
       border: none;
       border-radius: 999px;
       cursor: pointer;
@@ -148,20 +147,22 @@
     }
 
     .hero-btn:hover {
-      background: #f0f0f0;
+      background: darkred;
     }
 
-    /* button + counts row (THIS is what you move around) */
+    /* ===== BUTTON + COUNTS POSITIONING (EDIT THESE) ===== */
     .cta-row {
       margin-top: 14px;
       display: flex;
       align-items: center;
-      margin-left: 200px;
+      justify-content: center;
       gap: 16px;
       flex-wrap: wrap;
+
+      /* DESKTOP POSITION NUDGE (edit freely) */
+      transform: translate(0px, 0px); /* X = left/right, Y = up/down */
     }
 
-    /* counts text with NO box */
     .reg-counts {
       font-size: 14px;
       line-height: 1.4;
@@ -228,6 +229,17 @@
 
       h2 { font-size: 20px; }
 
+      /* ===== MOBILE BUTTON + COUNTS POSITIONING (EDIT THESE) ===== */
+      .cta-row {
+        justify-content: center;
+        flex-direction: column;    /* stacks counts under button */
+        align-items: center;
+        gap: 10px;
+
+        /* MOBILE POSITION NUDGE (edit freely) */
+        transform: translate(0px, 0px); /* X = left/right, Y = up/down */
+      }
+
       .reg-counts {
         font-size: 13px;
         text-align: center;
@@ -246,7 +258,7 @@
       </a>
 
       <a href="index.html" class="nav-btn">HOME</a>
-      <a href="about.html" class="contact-btn">ABOUT</a>
+      <a href="contact.html" class="contact-btn">ABOUT</a>
       <a href="rules.html" class="nav-btn">RULES</a>
     </div>
   </div>
@@ -275,26 +287,22 @@
             Registration opened until Mar 13th, 12pm
           </div>
 
-          <p style="margin-top: 12px;">
-            Questions or need a partner? Reach out and we’ll help match you up.
-          </p>
-
-          <div class="info-row">
-            <strong>Email:</strong> yourname@email.com<br>
-            <strong>Phone:</strong> (209) 408-7774
-          </div>
-
-          <!-- MOVE THIS BLOCK AROUND to position button + counts -->
+          <!-- BUTTON + COUNTS -->
           <div class="cta-row">
             <button class="hero-btn" onclick="location.href='register.html'">
               REGISTER
             </button>
 
             <div class="reg-counts">
-              <strong></strong> <br>
               <strong>Men Registered:</strong> 12/12<br>
               <strong>Women Registered:</strong> 12/12
             </div>
+          </div>
+
+          <div class="info-row">
+            <strong>Questions or need a partner? Reach out and we’ll help match you up.</strong><br>
+            <strong>Email:</strong> yourname@email.com<br>
+            <strong>Phone:</strong> (209) 408-7774
           </div>
 
         </div>
