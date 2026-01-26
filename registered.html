@@ -173,6 +173,13 @@
       white-space: nowrap;
     }
 
+    /* ✅ Added: green status chip for paid */
+    .status-chip.paid {
+      background: rgba(59, 255, 122, 0.14);
+      border: 1px solid rgba(59, 255, 122, 0.30);
+      color: #b9ffd0;
+    }
+
     .mini-row {
       display: flex;
       gap: 10px;
@@ -416,12 +423,12 @@
     <div class="hero-content">
 
       <div class="top-badge">
-        <div class="badge">✅ Registration received</div>
+        <div class="badge" id="topBadge">⏳ Confirming payment…</div>
       </div>
 
       <h1>You’re Registered</h1>
-      <p class="lead">
-        We received your team info. Your spot is <strong>pending payment</strong>.
+      <p class="lead" id="leadText">
+        We’re confirming your payment now.
       </p>
 
       <div class="grid">
@@ -437,36 +444,42 @@
               </div>
 
               <div class="mini-row">
-                <span class="mini">$40 per team</span>
-                <span class="mini">24-hour window</span>
+                <!-- You can update this later to match your Stripe amount if you want -->
+                <span class="mini">$2 per team</span>
+                <span class="mini">Instant confirmation</span>
               </div>
             </div>
 
-            <div class="status-chip">Pending payment</div>
+            <div class="status-chip" id="statusChip">Confirming…</div>
           </div>
 
-          <div class="steps">
+          <!-- ✅ This is the live status line the script updates -->
+          <div id="status" style="font-weight:900; font-size:16px; line-height:1.5;">
+            Confirming your payment...
+          </div>
+
+          <div class="steps" id="stepsBlock" style="margin-top:14px;">
             <div class="step">
               <div class="num">1</div>
               <div>
-                <h3>Send payment within 24 hours</h3>
-                <p>Venmo <strong>$40</strong> (covers both players — $20 each) to secure your spot.</p>
+                <h3>Do not refresh (yet)</h3>
+                <p>We’re checking Stripe and updating your registration now.</p>
               </div>
             </div>
 
             <div class="step">
               <div class="num">2</div>
               <div>
-                <h3>Add the payment note</h3>
-                <p>Include: <strong>SPRING FEST + Team Name</strong> so we can match you fast.</p>
+                <h3>Once confirmed</h3>
+                <p>Your team is officially locked in and marked <strong>PAID</strong>.</p>
               </div>
             </div>
 
             <div class="step">
               <div class="num">3</div>
               <div>
-                <h3>Watch for confirmation</h3>
-                <p>Once payment is received, your team is officially locked in.</p>
+                <h3>If it takes longer</h3>
+                <p>If it still says “confirming” after a minute, refresh once.</p>
               </div>
             </div>
           </div>
@@ -477,31 +490,27 @@
           </div>
         </div>
 
-        <!-- RIGHT: VENMO DETAILS -->
+        <!-- RIGHT: PAYMENT DETAILS (UPDATED FROM VENMO TO STRIPE CONFIRMATION) -->
         <div class="panel side-card">
           <p class="side-title">Payment details</p>
 
           <div class="venmo-box">
             <div class="venmo-line">
-              <div class="venmo-label">Amount</div>
-              <div class="venmo-value">$40</div>
+              <div class="venmo-label">Status</div>
+              <div class="venmo-value" id="rightStatus">Confirming…</div>
             </div>
             <div class="venmo-line">
-              <div class="venmo-label">Venmo</div>
-              <div class="venmo-value">@YourVenmoHere</div>
+              <div class="venmo-label">Registration ID</div>
+              <div class="venmo-value" id="rightRegId">—</div>
             </div>
             <div class="venmo-line">
-              <div class="venmo-label">Note</div>
-              <div class="venmo-value">SPRING FEST + Team Name</div>
-            </div>
-            <div class="venmo-line">
-              <div class="venmo-label">Deadline</div>
-              <div class="venmo-value">Within 24 hours</div>
+              <div class="venmo-label">Payment Intent</div>
+              <div class="venmo-value" id="rightPI">—</div>
             </div>
           </div>
 
-          <div class="warning">
-            If payment isn’t received within 24 hours, your spot may be released to the waitlist.
+          <div class="warning" id="warningBox" style="display:none;">
+            We couldn’t confirm payment yet. If you believe you paid, refresh once or contact us.
           </div>
         </div>
 
@@ -509,6 +518,88 @@
 
     </div>
   </div>
+
+  <script>
+    // ✅ Your Apps Script Web App URL (same as register.html)
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwYxZH7UAUUd96KhxPqvMf6XCEYc5s0_2hkVQcZs74bCar53vWDrNQ35_E5NtTL40ORuA/exec";
+
+    function qs(name) { return new URLSearchParams(location.search).get(name); }
+
+    (async function () {
+      const regId = qs("registrationId");
+      const paymentIntent = qs("payment_intent"); // Stripe adds this to return_url
+      const statusEl = document.getElementById("status");
+
+      const topBadge = document.getElementById("topBadge");
+      const leadText = document.getElementById("leadText");
+      const statusChip = document.getElementById("statusChip");
+
+      const rightStatus = document.getElementById("rightStatus");
+      const rightRegId = document.getElementById("rightRegId");
+      const rightPI = document.getElementById("rightPI");
+      const warningBox = document.getElementById("warningBox");
+
+      rightRegId.textContent = regId || "—";
+      rightPI.textContent = paymentIntent || "—";
+
+      if (!paymentIntent || !regId) {
+        topBadge.textContent = "⚠️ Missing payment details";
+        leadText.textContent = "We couldn’t read your payment confirmation details from the URL.";
+        statusChip.textContent = "Needs help";
+        statusEl.textContent = "Missing payment details. If you paid, contact us.";
+
+        rightStatus.textContent = "Missing details";
+        warningBox.style.display = "block";
+        return;
+      }
+
+      try {
+        const res = await fetch(scriptURL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            action: "confirmIntent",
+            payment_intent: paymentIntent,
+            registrationId: regId
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.ok) {
+          // ✅ Paid confirmed
+          topBadge.textContent = "✅ Payment confirmed";
+          leadText.innerHTML = "Your payment was confirmed. Your team is officially <strong>registered</strong>.";
+          statusChip.textContent = "Paid";
+          statusChip.classList.add("paid");
+
+          statusEl.textContent = "You’re registered ✅ See you on the court!";
+          rightStatus.textContent = "PAID";
+          warningBox.style.display = "none";
+
+        } else {
+          // Not confirmed yet (could be processing / requires_action / etc)
+          topBadge.textContent = "⏳ Payment pending";
+          leadText.textContent = "Your payment hasn’t confirmed yet. This can take a moment—refresh once if needed.";
+          statusChip.textContent = "Pending";
+          statusEl.textContent = `Payment not confirmed yet (status: ${data.status}). If you paid, refresh in a moment.`;
+
+          rightStatus.textContent = (data.status || "PENDING").toUpperCase();
+          warningBox.style.display = "block";
+        }
+
+      } catch (e) {
+        console.error(e);
+        topBadge.textContent = "⚠️ Could not confirm";
+        leadText.textContent = "We couldn’t confirm your payment right now. Please refresh once or contact us.";
+        statusChip.textContent = "Error";
+        statusEl.textContent = "Could not confirm payment. Please contact us.";
+
+        rightStatus.textContent = "ERROR";
+        warningBox.style.display = "block";
+      }
+    })();
+  </script>
 
 </body>
 </html>
