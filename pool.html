@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>530Volleyball | Pool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    /* NAV BAR (LOCKED HEIGHT) */
+    .navbar {
+      background: #040d6e;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      overflow: visible;
+    }
+
+    .nav-left,
+    .nav-right {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* LOGO IMAGE */
+    .logo-img {
+      height: 100px;
+      width: auto;
+      display: block;
+      margin-top: 15px;
+    }
+
+    /* NAV BUTTON STYLE */
+    .nav-btn,
+    .contact-btn {
+      background: rgba(255,255,255,0.18);
+      padding: 10px 16px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .nav-btn:hover,
+    .contact-btn:hover {
+      background: rgba(255,255,255,0.28);
+    }
+
+    /* HERO (same background as index) */
+    .hero {
+      min-height: calc(100vh - 100px);
+      background:
+        linear-gradient(rgba(0,0,0,0.50), rgba(0,0,0,0.50)),
+        url("hero.jpg") center/cover no-repeat;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 18px;
+      box-sizing: border-box;
+    }
+
+    .hero-content {
+      width: 100%;
+      max-width: 980px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      margin: 0 0 12px;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    .hero p.lead {
+      font-size: 18px;
+      line-height: 1.6;
+      opacity: 0.95;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto 22px;
+    }
+
+    /* ---- POOL PAGE (WHITE CARD + BLACK TEXT) ---- */
+    :root{
+      --border: rgba(0,0,0,0.12);
+      --mutedDark: rgba(0,0,0,0.62);
+      --shadow: 0 10px 30px rgba(0,0,0,0.18);
+      --radius: 18px;
+      --accent: #ff2d55;
+    }
+
+    .card {
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .top-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .pill {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 900;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.12);
+      color: rgba(0,0,0,0.62);
+      background: rgba(0,0,0,0.03);
+      white-space: nowrap;
+    }
+
+    .back-btn {
+      appearance: none;
+      border: 2px solid rgba(0,0,0,0.16);
+      background: #ffffff;
+      color: #0b1220;
+      font-weight: 900;
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .back-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(0,0,0,0.03);
+      border-color: rgba(0,0,0,0.30);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .subcard {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: #ffffff;
+      box-shadow: 0 10px 18px rgba(0,0,0,0.10);
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      letter-spacing: 0.3px;
+      color: #0b1220;
+    }
+
+    .muted {
+      color: var(--mutedDark);
+      line-height: 1.5;
+      margin: 6px 0 0 0;
+      font-size: 14px;
+    }
+
+    /* ===== TEAMS TABLE ===== */
+    .teams-table-wrap{
+      margin-top: 10px;
+      border: 1px solid rgba(0,0,0,0.10);
+      border-radius: 14px;
+      overflow: hidden;
+      background: rgba(0,0,0,0.02);
+    }
+
+    .teams-table{
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .teams-table thead th{
+      text-align: left;
+      padding: 10px 12px;
+      background: rgba(0,0,0,0.04);
+      border-bottom: 1px solid rgba(0,0,0,0.10);
+      color: rgba(0,0,0,0.72);
+      font-weight: 900;
+      letter-spacing: 0.2px;
+    }
+
+    .teams-table tbody td{
+      padding: 11px 12px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      font-weight: 700;
+      color: #0b1220;
+      vertical-align: middle;
+    }
+
+    .teams-table tbody tr:last-child td{
+      border-bottom: none;
+    }
+
+    .teams-table tbody tr:hover{
+      background: rgba(0,0,0,0.03);
+    }
+
+    .place-badge{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.12);
+      background: white;
+      font-weight: 900;
+      color: rgba(0,0,0,0.72);
+    }
+
+    .record-badge{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.10);
+      background: rgba(0,0,0,0.03);
+      font-weight: 900;
+      color: rgba(0,0,0,0.70);
+      float: right;
+      white-space: nowrap;
+    }
+
+    .team-name{
+      font-weight: 900;
+      color: #0b1220;
+    }
+
+    .teams-empty{
+      color: rgba(0,0,0,0.62);
+      font-weight: 700;
+    }
+
+    /* ===== Matches ===== */
+    .match-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 12px 0;
+      border-top: 1px solid rgba(0,0,0,0.08);
+    }
+    .match-row:first-of-type { border-top: none; padding-top: 0; }
+
+    .match-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 220px;
+    }
+
+    .match-title {
+      font-weight: 900;
+      color: #0b1220;
+    }
+
+    .match-teams {
+      color: rgba(0,0,0,0.70);
+      font-weight: 700;
+    }
+
+    .match-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .score-badge {
+      font-weight: 900;
+      color: rgba(0,0,0,0.70);
+      background: rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.10);
+      border-radius: 999px;
+      padding: 8px 12px;
+      white-space: nowrap;
+    }
+
+    .keep-btn {
+      display: inline-block;
+      text-decoration: none;
+      font-weight: 900;
+      text-align: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 2px solid rgba(0,0,0,0.16);
+      color: #0b1220;
+      background: #ffffff;
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+      white-space: nowrap;
+    }
+
+    .keep-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(0,0,0,0.03);
+      border-color: rgba(0,0,0,0.30);
+    }
+
+    .error {
+      background: rgba(255,0,0,0.08);
+      border: 1px solid rgba(255,0,0,0.22);
+      color: #7f1d1d;
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    @media (max-width: 700px) {
+      .navbar {
+        height: auto;
+        padding: 12px 14px;
+        align-items: flex-start;
+        gap: 10px;
+        flex-wrap: wrap;
+        overflow: visible;
+      }
+
+      .nav-left {
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .logo-img {
+        height: 56px;
+        margin-top: 0;
+      }
+
+      .nav-btn,
+      .contact-btn {
+        padding: 8px 12px;
+        border-radius: 16px;
+        font-size: 14px;
+      }
+
+      .hero {
+        padding: 26px 14px;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .hero p.lead {
+        font-size: 16px;
+      }
+
+      .card {
+        padding: 16px;
+        border-radius: 16px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV BAR (same as index.html) -->
+  <div class="navbar">
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="logo.png" alt="Logo" class="logo-img" />
+      </a>
+
+      <a href="index.html" class="nav-btn">HOME</a>
+      <a href="contact.html" class="contact-btn">ABOUT</a>
+      <a href="rules.html" class="nav-btn">RULES</a>
+      <a href="liveevent.html" class="nav-btn">LIVE EVENT</a>
+    </div>
+  </div>
+
+  <!-- HERO BACKGROUND + POOL CONTENT -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1 id="pageTitle">POOL</h1>
+      <p class="lead" id="pageLead">Loading pool data…</p>
+
+      <div class="card">
+        <div class="top-row">
+          <span class="pill" id="pillInfo">Tournament • Pool</span>
+          <a class="back-btn" href="liveevent.html">← Back to Live Event</a>
+        </div>
+
+        <div class="grid">
+          <!-- Teams -->
+          <div class="subcard">
+            <h2>Teams</h2>
+            <p class="muted">Teams in this pool.</p>
+
+            <div class="teams-table-wrap">
+              <table class="teams-table" aria-label="Pool standings table">
+                <thead>
+                  <tr>
+                    <th style="width: 90px;">Place</th>
+                    <th>Team</th>
+                    <th style="width: 120px; text-align:right;">Record</th>
+                  </tr>
+                </thead>
+                <tbody id="teamsList">
+                  <tr>
+                    <td><span class="place-badge">—</span></td>
+                    <td class="team-name">Loading…</td>
+                    <td style="text-align:right;"><span class="record-badge">—</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Matches -->
+          <div class="subcard">
+            <h2>Matches</h2>
+            <p class="muted">Pool matches (6 total). Click “Keep Score” to open the scorekeeper.</p>
+
+            <div id="matchesWrap">
+              <div class="match-row">
+                <div class="match-left">
+                  <div class="match-title">Loading…</div>
+                  <div class="match-teams">Please wait</div>
+                </div>
+                <div class="match-actions">
+                  <span class="score-badge">—</span>
+                  <a class="keep-btn" href="#">Keep Score</a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="error" id="errorBox"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===========================
+    // PUT YOUR REAL VALUES HERE
+    // ===========================
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwYxZH7UAUUd96KhxPqvMf6XCEYc5s0_2hkVQcZs74bCar53vWDrNQ35_E5NtTL40ORuA/exec";
+
+    // ===========================
+    // READ URL PARAMS
+    // pool.html?tournament=men&pool=1
+    // ===========================
+    const params = new URLSearchParams(window.location.search);
+    const tournament = (params.get("tournament") || "men").toLowerCase();
+    const pool = (params.get("pool") || "1").trim();
+
+    // UI elements
+    const pageTitle = document.getElementById("pageTitle");
+    const pageLead = document.getElementById("pageLead");
+    const pillInfo = document.getElementById("pillInfo");
+    const teamsList = document.getElementById("teamsList");
+    const matchesWrap = document.getElementById("matchesWrap");
+    const errorBox = document.getElementById("errorBox");
+
+    function showError(msg) {
+      errorBox.style.display = "block";
+      errorBox.textContent = msg;
+    }
+
+    function formatTournament(t) {
+      return t === "women" ? "WOMEN" : "MEN";
+    }
+
+    async function fetchJSON(url) {
+      const res = await fetch(url);
+      return await res.json();
+    }
+
+    async function loadPool() {
+      const tLabel = formatTournament(tournament);
+
+      pageTitle.textContent = `${tLabel} • POOL ${pool}`;
+      pillInfo.textContent = `${tLabel} • Pool ${pool}`;
+      pageLead.textContent = `Pool info for ${tLabel} Pool ${pool}.`;
+
+      // ✅ NEW: single call to getPoolState (ts busts cache)
+      const stateURL = `${WEB_APP_URL}?action=getPoolState&tournament=${encodeURIComponent(tournament)}&pool=${encodeURIComponent(pool)}&ts=${Date.now()}`;
+
+      let stateData;
+
+      try {
+        stateData = await fetchJSON(stateURL);
+      } catch (e) {
+        showError("Could not reach the backend. Check WEB_APP_URL and your deployment.");
+        return;
+      }
+
+      if (!stateData.ok) {
+        showError("getPoolState error: " + (stateData.error || "Unknown error"));
+        return;
+      }
+
+      // ✅ Render teams (real standings + record)
+      const standings = stateData.standings || [];
+      teamsList.innerHTML = "";
+
+      if (standings.length === 0) {
+        teamsList.innerHTML = `
+          <tr>
+            <td colspan="3" class="teams-empty">No teams found (check your Pools sheet).</td>
+          </tr>
+        `;
+      } else {
+        standings.forEach((s, i) => {
+          const record = `${s.wins}-${s.losses}`;
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><span class="place-badge">${i + 1}</span></td>
+            <td class="team-name">${s.team}</td>
+            <td style="text-align:right;"><span class="record-badge">${record}</span></td>
+          `;
+          teamsList.appendChild(tr);
+        });
+      }
+
+      // ✅ Render matches (real score badge + button label)
+      const matches = stateData.matches || [];
+      matchesWrap.innerHTML = "";
+
+      if (matches.length === 0) {
+        matchesWrap.innerHTML = `<div class="muted">No matches found (check your Matches sheet).</div>`;
+      } else {
+        matches.forEach(m => {
+          const row = document.createElement("div");
+          row.className = "match-row";
+
+          const hasScore = (m.scoreA !== null && m.scoreB !== null);
+          const scoreText = hasScore ? `Score: ${m.scoreA}-${m.scoreB}` : "Score: —";
+
+          const refText = m.teamC ? `Ref: ${m.teamC}` : "Ref: —";
+
+          const href = `score.html?matchId=${encodeURIComponent(m.matchId)}`;
+
+          row.innerHTML = `
+            <div class="match-left">
+              <div class="match-title">Match ${m.matchNo}</div>
+              <div class="match-teams">${m.teamA} vs ${m.teamB}</div>
+            </div>
+            <div class="match-actions">
+              <span class="score-badge">${scoreText}</span>
+              <span class="score-badge">${refText}</span>
+              <a class="keep-btn" href="${href}">${hasScore ? "Edit Score" : "Keep Score"}</a>
+            </div>
+          `;
+
+          matchesWrap.appendChild(row);
+        });
+      }
+    }
+
+    loadPool();
+  </script>
+</body>
+</html>
