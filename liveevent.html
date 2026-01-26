@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>530Volleyball | Live Event</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    /* NAV BAR (LOCKED HEIGHT) */
+    .navbar {
+      background: #040d6e;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      overflow: visible;
+    }
+
+    .nav-left,
+    .nav-right {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* LOGO IMAGE */
+    .logo-img {
+      height: 100px;
+      width: auto;
+      display: block;
+      margin-top: 15px;
+    }
+
+    /* NAV BUTTON STYLE */
+    .nav-btn,
+    .contact-btn {
+      background: rgba(255,255,255,0.18);
+      padding: 10px 16px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .nav-btn:hover,
+    .contact-btn:hover {
+      background: rgba(255,255,255,0.28);
+    }
+        /* Make LIVE EVENT stand out */
+    .nav-btn.live-event {
+      border: 2px solid #ff2d55;
+      background: rgba(255,255,255,0.18);
+      box-shadow: 0 0 0 rgba(255,45,85,0);
+    }
+
+    .nav-btn.live-event:hover {
+      background: rgba(255,255,255,0.26);
+      box-shadow: 0 0 0 4px rgba(255,45,85,0.18);
+    }
+
+    /* HERO (same background as index) */
+    .hero {
+      min-height: calc(100vh - 100px);
+      background:
+        linear-gradient(rgba(0,0,0,0.50), rgba(0,0,0,0.50)),
+        url("hero.jpg") center/cover no-repeat;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 18px;
+      box-sizing: border-box;
+    }
+
+    .hero-content {
+      width: 100%;
+      max-width: 980px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      margin: 0 0 14px;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    .hero p.lead {
+      font-size: 18px;
+      line-height: 1.6;
+      opacity: 0.95;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto 22px;
+    }
+
+    /* ---- LIVE EVENT STYLES ---- */
+    :root{
+      --border: rgba(0,0,0,0.12);
+      --mutedDark: rgba(0,0,0,0.62);
+      --shadow: 0 10px 30px rgba(0,0,0,0.18);
+      --radius: 18px;
+      --accent: #ff2d55;
+    }
+
+    /* MAIN CARD: NOW WHITE + BLACK TEXT */
+    .live-card {
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 22px;
+      box-shadow: var(--shadow);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      appearance: none;
+      border: 2px solid rgba(0,0,0,0.14);
+      background: rgba(0,0,0,0.02);
+      color: #111827;
+      font-weight: 800;
+      padding: 10px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, opacity 160ms ease;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(0,0,0,0.05);
+      border-color: rgba(0,0,0,0.26);
+    }
+
+    .tab-btn.active {
+      background: #0b1220;
+      color: white;
+      border-color: #0b1220;
+    }
+
+    .tab-btn.disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Section Head */
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: 0.5px;
+      color: #0b1220;
+    }
+
+    .section-note {
+      margin: 6px 0 0 0;
+      color: var(--mutedDark);
+      font-size: 14px;
+      line-height: 1.5;
+      max-width: 560px;
+    }
+
+    /* Tournament Toggle */
+    .toggle {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .toggle-btn {
+      border: 2px solid rgba(0,0,0,0.14);
+      background: rgba(0,0,0,0.02);
+      color: #111827;
+      font-weight: 900;
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 160ms ease, transform 160ms ease, border-color 160ms ease;
+      min-width: 120px;
+      text-align: center;
+      position: relative;
+    }
+
+    .toggle-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(0,0,0,0.05);
+      border-color: rgba(0,0,0,0.26);
+    }
+
+    .toggle-btn.active {
+      background: #ffffff;
+      border-color: #0b1220;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.10);
+    }
+
+    .toggle-btn.active::after {
+      content: "";
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: -6px;
+      height: 3px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    /* Pool grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    /* POOL CARDS: WHITE + BLACK */
+    .pool-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: #ffffff;
+      box-shadow: 0 10px 18px rgba(0,0,0,0.10);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      color: #111827;
+    }
+
+    .pool-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pool-name {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 0.2px;
+      color: #0b1220;
+    }
+
+    .pill {
+      font-size: 12px;
+      font-weight: 900;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.12);
+      color: rgba(0,0,0,0.62);
+      background: rgba(0,0,0,0.03);
+      white-space: nowrap;
+    }
+
+    .pool-desc {
+      margin: 0;
+      color: rgba(0,0,0,0.62);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .pool-btn {
+      margin-top: auto;
+      display: inline-block;
+      text-decoration: none;
+      font-weight: 900;
+      text-align: center;
+      padding: 12px 14px;
+      border-radius: 999px;
+      border: 2px solid rgba(0,0,0,0.16);
+      color: #0b1220;
+      background: #ffffff;
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+
+    .pool-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(0,0,0,0.03);
+      border-color: rgba(0,0,0,0.30);
+    }
+
+    /* Playoffs lock box */
+    .lock-box {
+      border: 1px dashed rgba(0,0,0,0.22);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: rgba(0,0,0,0.02);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      color: #111827;
+    }
+
+    .lock-title {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 900;
+      color: #0b1220;
+    }
+
+    .lock-text {
+      margin: 6px 0 0 0;
+      color: rgba(0,0,0,0.62);
+      font-size: 14px;
+      line-height: 1.5;
+      max-width: 640px;
+    }
+
+    .lock-btn {
+      appearance: none;
+      border: none;
+      padding: 14px 18px;
+      font-size: 14px;
+      background: #0b1220;
+      color: #ffffff;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .lock-btn:hover {
+      opacity: 0.92;
+    }
+
+    /* --- MOBILE FIXES (PUT THIS AT THE VERY BOTTOM) --- */
+    @media (max-width: 700px) {
+      .navbar {
+        height: auto;
+        padding: 12px 14px;
+        align-items: flex-start;
+        gap: 10px;
+        flex-wrap: wrap;
+        overflow: visible;
+      }
+
+      .nav-left {
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .nav-right {
+        width: 100%;
+        justify-content: flex-start;
+        margin-top: 6px;
+      }
+
+      .logo-img {
+        height: 56px;
+        margin-top: 0;
+      }
+
+      .nav-btn,
+      .contact-btn {
+        padding: 8px 12px;
+        border-radius: 16px;
+        font-size: 14px;
+      }
+
+      .hero {
+        padding: 26px 14px;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .hero p.lead {
+        font-size: 16px;
+      }
+
+      .live-card {
+        padding: 16px;
+        border-radius: 16px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV BAR (same as index.html) -->
+  <div class="navbar">
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="logo.png" alt="Logo" class="logo-img" />
+      </a>
+
+      <a href="index.html" class="nav-btn">HOME</a>
+      <a href="contact.html" class="contact-btn">ABOUT</a>
+      <a href="rules.html" class="nav-btn">RULES</a>
+      <a href="liveevent.html" class="nav-btn live-event">LIVE EVENT</a>
+    </div>
+  </div>
+
+  <!-- HERO BACKGROUND + LIVE EVENT CONTENT -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1>LIVE EVENT</h1>
+      <p class="lead">
+        Pools and live scoring. Choose Men or Women, then go to Pool 1 or Pool 2.
+        Playoffs stays locked until you publish the bracket.
+      </p>
+
+      <div class="live-card">
+        <!-- Tabs -->
+        <div class="tabs" role="tablist" aria-label="Live Event Tabs">
+          <button class="tab-btn active" id="tabPools" role="tab" aria-selected="true" aria-controls="panelPools">Pools</button>
+          <button class="tab-btn disabled" id="tabPlayoffs" role="tab" aria-selected="false" aria-controls="panelPlayoffs" disabled>Playoffs</button>
+        </div>
+
+        <!-- Pools Panel -->
+        <div id="panelPools" role="tabpanel" aria-labelledby="tabPools">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">Pools</h2>
+              <p class="section-note">
+                Choose a tournament, then go to Pool 1 or Pool 2. (Later, this can be powered by Google Sheets.)
+              </p>
+            </div>
+
+            <div class="toggle" aria-label="Tournament Toggle">
+              <button class="toggle-btn active" id="btnMen" type="button">Men</button>
+              <button class="toggle-btn" id="btnWomen" type="button">Women</button>
+            </div>
+          </div>
+
+          <div class="grid" id="poolGrid">
+            <!-- Cards injected by JS -->
+          </div>
+        </div>
+
+        <!-- Playoffs Panel -->
+        <div id="panelPlayoffs" role="tabpanel" aria-labelledby="tabPlayoffs" style="display:none;">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">Playoffs</h2>
+              <p class="section-note">This stays locked until you publish the bracket.</p>
+            </div>
+          </div>
+
+          <div class="lock-box">
+            <div>
+              <p class="lock-title">Bracket not published yet 🔒</p>
+              <p class="lock-text">
+                When you’re ready, you’ll flip a “published” flag in Google Sheets and this tab becomes clickable.
+                For now, it’s disabled so players don’t see an unfinished bracket.
+              </p>
+            </div>
+            <button class="lock-btn" type="button" id="demoPublishBtn">Demo: Publish Bracket</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ====== DEMO DATA (Replace later with Sheets fetch) ======
+    const POOLS_BY_TOURNAMENT = {
+      men: [
+        { pool: 1, title: "Pool 1", desc: "4 teams • 6 matches", badge: "Men • Pool 1" },
+        { pool: 2, title: "Pool 2", desc: "4 teams • 6 matches", badge: "Men • Pool 2" }
+      ],
+      women: [
+        { pool: 1, title: "Pool 1", desc: "4 teams • 6 matches", badge: "Women • Pool 1" },
+        { pool: 2, title: "Pool 2", desc: "4 teams • 6 matches", badge: "Women • Pool 2" }
+      ]
+    };
+
+    // ====== STATE ======
+    let tournament = "men";
+    let playoffsPublished = false; // later: load from Google Sheets
+
+    // ====== ELEMENTS ======
+    const tabPools = document.getElementById("tabPools");
+    const tabPlayoffs = document.getElementById("tabPlayoffs");
+    const panelPools = document.getElementById("panelPools");
+    const panelPlayoffs = document.getElementById("panelPlayoffs");
+
+    const btnMen = document.getElementById("btnMen");
+    const btnWomen = document.getElementById("btnWomen");
+    const poolGrid = document.getElementById("poolGrid");
+
+    // ====== RENDER POOLS ======
+    function renderPools() {
+      poolGrid.innerHTML = "";
+      const pools = POOLS_BY_TOURNAMENT[tournament];
+
+      pools.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "pool-card";
+
+        // Link uses query params (so you don't need Pool1Men.html, etc.)
+        const href = `pool.html?tournament=${encodeURIComponent(tournament)}&pool=${encodeURIComponent(p.pool)}`;
+
+        card.innerHTML = `
+          <div class="pool-top">
+            <h3 class="pool-name">${p.title}</h3>
+            <span class="pill">${p.badge}</span>
+          </div>
+          <p class="pool-desc">${p.desc}</p>
+          <a class="pool-btn" href="${href}">Go to Pool</a>
+        `;
+
+        poolGrid.appendChild(card);
+      });
+    }
+
+    // ====== TOURNAMENT TOGGLE ======
+    function setTournament(next) {
+      tournament = next;
+      btnMen.classList.toggle("active", tournament === "men");
+      btnWomen.classList.toggle("active", tournament === "women");
+      renderPools();
+    }
+
+    btnMen.addEventListener("click", () => setTournament("men"));
+    btnWomen.addEventListener("click", () => setTournament("women"));
+
+    // ====== TABS ======
+    function openTab(which) {
+      const isPools = which === "pools";
+
+      tabPools.classList.toggle("active", isPools);
+      tabPools.setAttribute("aria-selected", String(isPools));
+      panelPools.style.display = isPools ? "" : "none";
+
+      tabPlayoffs.classList.toggle("active", !isPools);
+      tabPlayoffs.setAttribute("aria-selected", String(!isPools));
+      panelPlayoffs.style.display = !isPools ? "" : "none";
+    }
+
+    tabPools.addEventListener("click", () => openTab("pools"));
+
+    tabPlayoffs.addEventListener("click", () => {
+      if (!playoffsPublished) return;
+      openTab("playoffs");
+    });
+
+    // ====== PUBLISH PLAYOFFS (DEMO ONLY) ======
+    function applyPlayoffsLock() {
+      tabPlayoffs.disabled = !playoffsPublished;
+      tabPlayoffs.classList.toggle("disabled", !playoffsPublished);
+      tabPlayoffs.title = playoffsPublished ? "" : "Playoffs locked until bracket is published";
+    }
+
+    document.getElementById("demoPublishBtn").addEventListener("click", () => {
+      playoffsPublished = true;
+      applyPlayoffsLock();
+      openTab("playoffs");
+    });
+
+    // ====== INIT ======
+    renderPools();
+    applyPlayoffsLock();
+  </script>
+</body>
+</html>
