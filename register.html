@@ -78,11 +78,14 @@
       box-shadow: none;
     }
 
-    /* Your form wrap */
+    /* ✅ Your form wrap (UPDATED: force perfect centering) */
     .wrap {
       max-width: 860px;
       margin: 0 auto;
       padding: 0 18px;
+
+      display: flex;               /* ✅ add */
+      justify-content: center;     /* ✅ add */
     }
 
     /* ✅ Form card (DARK like your other page) */
@@ -197,6 +200,11 @@
 
       .container {
         padding: 26px 16px;
+      }
+
+      /* ✅ UPDATED: remove extra wrap padding on phones */
+      .wrap {
+        padding: 0;                 /* ✅ add */
       }
 
       .card {
