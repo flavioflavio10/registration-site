@@ -59,6 +59,35 @@
       background: rgba(255,255,255,0.28);
     }
 
+    .nav-btn.live-event {
+      border: 4px solid #ff2d55;
+      background: rgba(255,255,255,0.18);
+      animation: livePulse 1.2s infinite;
+    }
+
+    .nav-btn.live-event:hover {
+      background: rgba(255,255,255,0.26);
+      animation: none;
+      box-shadow: 0 0 0 4px rgba(255,45,85,0.18);
+    }
+
+    @keyframes livePulse {
+      0% {
+        border-color: rgba(255,45,85,0.25);
+        box-shadow: 0 0 0 0 rgba(255,45,85,0.00);
+      }
+      50% {
+        border-color: rgba(255,45,85,1);
+        box-shadow: 0 0 0 6px rgba(255,45,85,0.22);
+      }
+      100% {
+        border-color: rgba(255,45,85,0.25);
+        box-shadow: 0 0 0 0 rgba(255,45,85,0.00);
+      }
+    }
+
+
+
     /* HERO */
     .hero {
       height: calc(100vh - 100px);  /* matches navbar height (100px) */
@@ -179,9 +208,10 @@
       <a href="index.html" class="nav-btn">HOME</a>
       <a href="contact.html" class="contact-btn">ABOUT</a>
       <a href="rules.html" class="nav-btn">RULES</a>
+      <a href="liveevent.html" class="nav-btn live-event">LIVE EVENT</a>
     </div>
 
-  
+
   </div>
 
   <!-- HERO -->
@@ -189,7 +219,7 @@
     <div class="hero-content">
       <h1>WELCOME TO 530VOLLEYBALL!</h1>
       <p>
-        We host fun, competitive grass and sand volleyball tournaments in Redding, CA, 
+        We host fun, competitive grass and sand volleyball tournaments in Redding, CA,
         bringing players together for great matches,
         good vibes, and unforgettable weekends.
       </p>
