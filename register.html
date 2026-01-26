@@ -107,7 +107,7 @@
     label { font-weight: 600; font-size: 14px; color: rgba(255,255,255,0.92); }
     .note { font-size: 13px; color: rgba(255,255,255,0.70); margin-top: 10px; }
 
-    .row { display:flex; gap: 10px; flex-wrap: wrap; }
+    .row { display:flex; gap: 14px; flex-wrap: wrap; }
     .field { flex: 1 1 240px; display:flex; flex-direction: column; gap: 6px; margin: 10px 0; }
 
     /* ✅ Inputs readable on dark card */
@@ -157,6 +157,9 @@
 
     .error { margin-top: 12px; color:#ff5a5f; font-weight: 700; }
     .success { margin-top: 12px; color:#3bff7a; font-weight: 700; }
+
+    /* Stripe Payment Element container spacing */
+    #paymentWrap { margin-top: 16px; }
 
     /* --- MOBILE FIXES (same spirit as events.html) --- */
     @media (max-width: 700px) {
@@ -299,13 +302,23 @@
             </div>
           </div>
 
-          <button class="btn" id="submitBtn">Register Team</button>
+          <!-- ✅ Stripe Payment Element container (hidden until we create the PaymentIntent) -->
+          <div id="paymentWrap" style="display:none;">
+            <div id="payment-element"></div>
+          </div>
+
+          <!-- ✅ Button now is a 2-step flow: Continue -> Pay -->
+          <button class="btn" id="submitBtn">Continue to Payment</button>
+
           <div class="error" id="errorMsg" style="display:none;"></div>
           <div class="success" id="successMsg" style="display:none;"></div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- ✅ Stripe.js (must be loaded before your script that uses Stripe()) -->
+  <script src="https://js.stripe.com/v3/"></script>
 
   <script>
     // Only one division checkbox at a time
@@ -314,12 +327,24 @@
     women.addEventListener("change", () => { if (women.checked) men.checked = false; });
     men.addEventListener("change", () => { if (men.checked) women.checked = false; });
 
-    // ✅ PASTE YOUR WEB APP URL HERE
+    // ✅ Your Apps Script Web App URL
     const scriptURL = "https://script.google.com/macros/s/AKfycbwYxZH7UAUUd96KhxPqvMf6XCEYc5s0_2hkVQcZs74bCar53vWDrNQ35_E5NtTL40ORuA/exec";
+
+    // ✅ Stripe publishable key (SAFE to put in the browser)
+    //    Replace with your pk_test_... key from Stripe Dashboard
+    const STRIPE_PUBLISHABLE_KEY = "pk_live_51SthyzILimcUNTFxQPTOdYd4m6CPgVSjeV8aJKzwmEzCSp3cdbSCR3pGYwkf281lL4aX55jdMkwZ7e5HdxIVXs5600nBEjQG3l";
+
+    // ✅ Your registered.html URL on GitHub Pages
+    //    Example: https://YOURUSERNAME.github.io/YOURREPO/registered.html
+    //    Replace with your real URL (must be accessible publicly)
+    const RETURN_URL = "http://www.530volleyball.com/registered.html";
+
+    const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
 
     const submitBtn = document.getElementById("submitBtn");
     const errorMsg = document.getElementById("errorMsg");
     const successMsg = document.getElementById("successMsg");
+    const paymentWrap = document.getElementById("paymentWrap");
 
     const val = (id) => document.getElementById(id).value.trim();
 
@@ -328,16 +353,63 @@
       errorMsg.style.display = "block";
       successMsg.style.display = "none";
     }
+
     function showSuccess(msg) {
       successMsg.textContent = msg;
       successMsg.style.display = "block";
       errorMsg.style.display = "none";
     }
 
+    // Stripe Elements (initialized after we create a PaymentIntent)
+    let elements = null;
+    let registrationId = null;
+
+    // Small helper to lock/unlock the form inputs after payment starts
+    function setInputsDisabled(disabled) {
+      const ids = [
+        "divisionWomen","divisionMen","teamName",
+        "p1First","p1Last","p1Phone","p1Email",
+        "p2First","p2Last","p2Phone","p2Email",
+        "agreeTerms"
+      ];
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (el) el.disabled = disabled;
+      }
+    }
+
     submitBtn.addEventListener("click", async () => {
       errorMsg.style.display = "none";
       successMsg.style.display = "none";
 
+      // ------------------------------------------------------------
+      // STEP 2: If Payment Element is already mounted -> this click is "Pay"
+      // ------------------------------------------------------------
+      if (elements) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Processing...";
+
+        const { error } = await stripe.confirmPayment({
+          elements,
+          confirmParams: {
+            // Stripe will return the user here if extra auth is needed
+            // Stripe will also add ?payment_intent=...&payment_intent_client_secret=... to the URL
+            return_url: `${RETURN_URL}?registrationId=${encodeURIComponent(registrationId)}`
+          }
+        });
+
+        // If confirmPayment returns an error immediately (validation / card issue)
+        if (error) {
+          showError(error.message || "Payment failed. Please try again.");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Pay $2";
+        }
+        return;
+      }
+
+      // ------------------------------------------------------------
+      // STEP 1: First click -> validate form, create PaymentIntent, mount Payment Element
+      // ------------------------------------------------------------
       const division = women.checked ? "Womens" : men.checked ? "Men" : "";
       if (!division) return showError("Please select Womens or Men.");
       if (!val("teamName")) return showError("Please enter a team name.");
@@ -349,7 +421,7 @@
       }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = "Submitting...";
+      submitBtn.textContent = "Loading payment...";
 
       const payload = {
         division,
@@ -361,30 +433,44 @@
         p2First: val("p2First"),
         p2Last: val("p2Last"),
         p2Phone: val("p2Phone"),
-        p2Email: val("p2Email"),
-        page: window.location.href,
-        userAgent: navigator.userAgent
+        p2Email: val("p2Email")
       };
 
       try {
+        // Call Apps Script to create PaymentIntent + PENDING row
         const res = await fetch(scriptURL, {
           method: "POST",
           mode: "cors",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload)
+          body: JSON.stringify({ action: "createIntent", payload })
         });
 
-        if (!res.ok) throw new Error("Server returned an error");
+        const data = await res.json();
+        if (!res.ok || !data.ok) throw new Error(data.error || "createIntent failed");
 
-        showSuccess("Registered! Redirecting...");
-        setTimeout(() => window.location.href = "registered.html", 700);
+        registrationId = data.registrationId;
+
+        // Mount Stripe Payment Element into your page
+        elements = stripe.elements({
+          clientSecret: data.clientSecret,
+          appearance: { theme: "night" } // good match for your dark card
+        });
+
+        const paymentElement = elements.create("payment");
+        paymentElement.mount("#payment-element");
+
+        paymentWrap.style.display = "block";
+        setInputsDisabled(true);
+        showSuccess("Payment loaded. Enter your payment info below.");
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Pay $2";
 
       } catch (err) {
         console.error(err);
-        showError("Submission failed. Double-check your Apps Script URL and deployment settings.");
-      } finally {
+        showError("Could not start payment. Double-check your Stripe key, Apps Script deployment, and Script Properties.");
         submitBtn.disabled = false;
-        submitBtn.textContent = "Register Team";
+        submitBtn.textContent = "Continue to Payment";
       }
     });
   </script>
