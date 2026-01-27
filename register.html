@@ -337,7 +337,7 @@
     // ✅ Your registered.html URL on GitHub Pages
     //    Example: https://YOURUSERNAME.github.io/YOURREPO/registered.html
     //    Replace with your real URL (must be accessible publicly)
-    const RETURN_URL = "https://www.530volleyball.com/registered.html";
+    const RETURN_URL = "http://www.530volleyball.com/registered.html";
 
     const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
 
@@ -402,7 +402,7 @@
         if (error) {
           showError(error.message || "Payment failed. Please try again.");
           submitBtn.disabled = false;
-          submitBtn.textContent = "Pay $2";
+          submitBtn.textContent = "Pay $40";
         }
         return;
       }
