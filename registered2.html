@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>530Volleyball | Registered</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    /* NAV BAR (LOCKED HEIGHT) — KEEP SAME */
+    .navbar {
+      background: #040d6e;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      overflow: visible;
+    }
+
+    .nav-left,
+    .nav-right {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* LOGO IMAGE — KEEP SAME */
+    .logo-img {
+      height: 100px;
+      width: auto;
+      display: block;
+      margin-top: 15px;
+    }
+
+    /* NAV BUTTON STYLE — KEEP SAME */
+    .nav-btn,
+    .contact-btn {
+      background: rgba(255,255,255,0.18);
+      padding: 10px 16px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .nav-btn:hover,
+    .contact-btn:hover {
+      background: rgba(255,255,255,0.28);
+    }
+
+    /* HERO BACKGROUND (same hero.jpg) — KEEP SAME IMAGE */
+    .hero {
+      min-height: calc(100vh - 100px);
+      background:
+        linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55)),
+        url("hero.jpg") center/cover no-repeat;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 44px 18px;
+      box-sizing: border-box;
+    }
+
+    .hero-content {
+      width: 100%;
+      max-width: 980px;
+    }
+
+    /* NEW DESIGN */
+    .top-badge {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-size: 44px;
+      margin: 6px 0 10px;
+      letter-spacing: 1px;
+      text-align: center;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+
+    .hero p.lead {
+      font-size: 18px;
+      line-height: 1.6;
+      opacity: 0.95;
+      text-align: center;
+      max-width: 920px;
+      margin: 0 auto 22px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .panel {
+      background: rgba(0,0,0,0.42);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.32);
+      backdrop-filter: blur(8px);
+    }
+
+    .event-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .event-title {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 0.4px;
+      margin: 0;
+      line-height: 1.25;
+    }
+
+    .event-sub {
+      margin-top: 6px;
+      opacity: 0.95;
+      line-height: 1.55;
+      font-size: 15px;
+    }
+
+    .status-chip {
+      flex: 0 0 auto;
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      background: rgba(255, 193, 7, 0.18);
+      border: 1px solid rgba(255, 193, 7, 0.35);
+      color: #ffe8a6;
+      margin-top: 2px;
+      white-space: nowrap;
+    }
+
+    /* ✅ Added: green status chip for paid */
+    .status-chip.paid {
+      background: rgba(59, 255, 122, 0.14);
+      border: 1px solid rgba(59, 255, 122, 0.30);
+      color: #b9ffd0;
+    }
+
+    .mini-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .mini {
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.14);
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .steps {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+      text-align: left;
+    }
+
+    .step {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .num {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.18);
+      flex: 0 0 auto;
+      margin-top: 1px;
+    }
+
+    .step h3 {
+      margin: 0;
+      font-size: 15px;
+      letter-spacing: 0.3px;
+    }
+
+    .step p {
+      margin: 4px 0 0;
+      opacity: 0.95;
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .side-card {
+      text-align: left;
+    }
+
+    .side-title {
+      margin: 0 0 10px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      opacity: 0.95;
+    }
+
+    .venmo-box {
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .venmo-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .venmo-line:last-child { border-bottom: none; }
+
+    .venmo-label {
+      opacity: 0.9;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .venmo-value {
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+      text-align: right;
+      word-break: break-word;
+    }
+
+    .warning {
+      margin-top: 12px;
+      border-radius: 18px;
+      padding: 12px 14px;
+      background: rgba(255, 77, 79, 0.12);
+      border: 1px solid rgba(255, 77, 79, 0.25);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 18px;
+    }
+
+    .hero-btn {
+      padding: 14px 22px;
+      font-size: 16px;
+      background: white;
+      color: #1f3556;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+    }
+
+    .hero-btn:hover {
+      background: #f0f0f0;
+    }
+
+    .ghost-btn {
+      padding: 14px 22px;
+      font-size: 16px;
+      background: rgba(255,255,255,0.10);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.20);
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+      backdrop-filter: blur(6px);
+    }
+
+    .ghost-btn:hover {
+      background: rgba(255,255,255,0.16);
+    }
+
+    /* --- MOBILE FIXES (PUT THIS AT THE VERY BOTTOM) --- */
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 700px) {
+      .navbar {
+        height: auto;
+        padding: 12px 14px;
+        align-items: flex-start;
+        gap: 10px;
+        flex-wrap: wrap;
+        overflow: visible;
+      }
+
+      .nav-left {
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .nav-right {
+        width: 100%;
+        justify-content: flex-start;
+        margin-top: 6px;
+      }
+
+      .logo-img {
+        height: 56px;
+        margin-top: 0;
+      }
+
+      .nav-btn,
+      .contact-btn {
+        padding: 8px 12px;
+        border-radius: 16px;
+        font-size: 14px;
+      }
+
+      .hero {
+        padding: 26px 14px;
+      }
+
+      .hero h1 {
+        font-size: 30px;
+      }
+
+      .hero p.lead {
+        font-size: 16px;
+      }
+
+      .panel {
+        padding: 14px;
+        border-radius: 18px;
+      }
+
+      .event-title {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV BAR (same as index.html) -->
+  <div class="navbar">
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="logo.png" alt="Logo" class="logo-img" />
+      </a>
+
+      <a href="index.html" class="nav-btn">HOME</a>
+      <a href="contact.html" class="contact-btn">ABOUT</a>
+      <a href="rules.html" class="nav-btn">RULES</a>
+    </div>
+  </div>
+
+  <!-- HERO BACKGROUND + CONTENT -->
+  <div class="hero">
+    <div class="hero-content">
+
+      <div class="top-badge">
+        <div class="badge" id="topBadge">⏳ Confirming payment…</div>
+      </div>
+
+      <h1>You’re Registered</h1>
+      <p class="lead" id="leadText">
+        We’re confirming your payment now.
+      </p>
+
+      <div class="grid">
+
+        <!-- LEFT: EVENT + STEPS -->
+        <div class="panel">
+          <div class="event-header">
+            <div>
+              <p class="event-title">WINTER FEST - M/F Doubles</p>
+              <div class="event-sub">
+                Sun Feb 8th<br>
+                Tournament | Caldwell Soccer Park, Redding, CA
+              </div>
+
+              <div class="mini-row">
+                <!-- You can update this later to match your Stripe amount if you want -->
+                <span class="mini">$40 per team</span>
+                <span class="mini">Instant confirmation</span>
+              </div>
+            </div>
+
+            <div class="status-chip" id="statusChip">Confirming…</div>
+          </div>
+
+          <!-- ✅ This is the live status line the script updates -->
+          <div id="status" style="font-weight:900; font-size:16px; line-height:1.5;">
+            Confirming your payment...
+          </div>
+
+          <div class="steps" id="stepsBlock" style="margin-top:14px;">
+            <div class="step">
+              <div class="num">1</div>
+              <div>
+                <h3>Do not refresh (yet)</h3>
+                <p>We’re checking Stripe and updating your registration now.</p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="num">2</div>
+              <div>
+                <h3>Once confirmed</h3>
+                <p>Your team is officially locked in and marked <strong>PAID</strong>.</p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="num">3</div>
+              <div>
+                <h3>If it takes longer</h3>
+                <p>If it still says “confirming” after a minute, refresh once.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="hero-btn" onclick="location.href='events.html'">VIEW EVENTS</button>
+            <button class="ghost-btn" onclick="location.href='index.html'">BACK HOME</button>
+          </div>
+        </div>
+
+        <!-- RIGHT: PAYMENT DETAILS (UPDATED FROM VENMO TO STRIPE CONFIRMATION) -->
+        <div class="panel side-card">
+          <p class="side-title">Payment details</p>
+
+          <div class="venmo-box">
+            <div class="venmo-line">
+              <div class="venmo-label">Status</div>
+              <div class="venmo-value" id="rightStatus">Confirming…</div>
+            </div>
+            <div class="venmo-line">
+              <div class="venmo-label">Registration ID</div>
+              <div class="venmo-value" id="rightRegId">—</div>
+            </div>
+            <div class="venmo-line">
+              <div class="venmo-label">Payment Intent</div>
+              <div class="venmo-value" id="rightPI">—</div>
+            </div>
+          </div>
+
+          <div class="warning" id="warningBox" style="display:none;">
+            We couldn’t confirm payment yet. If you believe you paid, refresh once or contact us.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // ✅ Your Apps Script Web App URL (same as register.html)
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwYxZH7UAUUd96KhxPqvMf6XCEYc5s0_2hkVQcZs74bCar53vWDrNQ35_E5NtTL40ORuA/exec";
+
+    function qs(name) { return new URLSearchParams(location.search).get(name); }
+
+    (async function () {
+      const regId = qs("registrationId");
+      const paymentIntent = qs("payment_intent"); // Stripe adds this to return_url
+      const statusEl = document.getElementById("status");
+
+      const topBadge = document.getElementById("topBadge");
+      const leadText = document.getElementById("leadText");
+      const statusChip = document.getElementById("statusChip");
+
+      const rightStatus = document.getElementById("rightStatus");
+      const rightRegId = document.getElementById("rightRegId");
+      const rightPI = document.getElementById("rightPI");
+      const warningBox = document.getElementById("warningBox");
+
+      rightRegId.textContent = regId || "—";
+      rightPI.textContent = paymentIntent || "—";
+
+      if (!paymentIntent || !regId) {
+        topBadge.textContent = "⚠️ Missing payment details";
+        leadText.textContent = "We couldn’t read your payment confirmation details from the URL.";
+        statusChip.textContent = "Needs help";
+        statusEl.textContent = "Missing payment details. If you paid, contact us.";
+
+        rightStatus.textContent = "Missing details";
+        warningBox.style.display = "block";
+        return;
+      }
+
+      try {
+        const res = await fetch(scriptURL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            action: "confirmIntent",
+            payment_intent: paymentIntent,
+            registrationId: regId
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.ok) {
+          // ✅ Paid confirmed
+          topBadge.textContent = "✅ Payment confirmed";
+          leadText.innerHTML = "Your payment was confirmed. Your team is officially <strong>registered</strong>.";
+          statusChip.textContent = "Paid";
+          statusChip.classList.add("paid");
+
+          statusEl.textContent = "You’re registered ✅ See you on the court!";
+          rightStatus.textContent = "PAID";
+          warningBox.style.display = "none";
+
+        } else {
+          // Not confirmed yet (could be processing / requires_action / etc)
+          topBadge.textContent = "⏳ Payment pending";
+          leadText.textContent = "Your payment hasn’t confirmed yet. This can take a moment—refresh once if needed.";
+          statusChip.textContent = "Pending";
+          statusEl.textContent = `Payment not confirmed yet (status: ${data.status}). If you paid, refresh in a moment.`;
+
+          rightStatus.textContent = (data.status || "PENDING").toUpperCase();
+          warningBox.style.display = "block";
+        }
+
+      } catch (e) {
+        console.error(e);
+        topBadge.textContent = "⚠️ Could not confirm";
+        leadText.textContent = "We couldn’t confirm your payment right now. Please refresh once or contact us.";
+        statusChip.textContent = "Error";
+        statusEl.textContent = "Could not confirm payment. Please contact us.";
+
+        rightStatus.textContent = "ERROR";
+        warningBox.style.display = "block";
+      }
+    })();
+  </script>
+
+</body>
+</html>
