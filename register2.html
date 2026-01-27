@@ -242,7 +242,7 @@
           <div class="field">
             <label>Tournament</label>
             <div class="checks">
-              <label><input type="checkbox" id="divisionWomen" /> Reverse Coed Doubles</label>
+              <label><input type="checkbox" id="divisionReverseCoed" /> Reverse Coed Doubles</label>
             </div>
             <div class="note">Select the format.</div>
           </div>
@@ -320,22 +320,16 @@
   <script src="https://js.stripe.com/v3/"></script>
 
   <script>
-    // Only one division checkbox at a time
-    const women = document.getElementById("divisionWomen");
-    const men = document.getElementById("divisionMen");
-    women.addEventListener("change", () => { if (women.checked) men.checked = false; });
-    men.addEventListener("change", () => { if (men.checked) women.checked = false; });
+    // ✅ Only one checkbox exists: Reverse Coed Doubles
+    const reverseCoed = document.getElementById("divisionReverseCoed");
 
     // ✅ Your Apps Script Web App URL
     const scriptURL = "https://script.google.com/macros/s/AKfycbwYxZH7UAUUd96KhxPqvMf6XCEYc5s0_2hkVQcZs74bCar53vWDrNQ35_E5NtTL40ORuA/exec";
 
     // ✅ Stripe publishable key (SAFE to put in the browser)
-    //    Replace with your pk_test_... key from Stripe Dashboard
     const STRIPE_PUBLISHABLE_KEY = "pk_live_51SthyzILimcUNTFxQPTOdYd4m6CPgVSjeV8aJKzwmEzCSp3cdbSCR3pGYwkf281lL4aX55jdMkwZ7e5HdxIVXs5600nBEjQG3l";
 
     // ✅ Your registered2.html URL on GitHub Pages
-    //    Example: https://YOURUSERNAME.github.io/YOURREPO/registered2.html
-    //    Replace with your real URL (must be accessible publicly)
     const RETURN_URL = "http://www.530volleyball.com/registered2.html";
 
     const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
@@ -366,7 +360,7 @@
     // Small helper to lock/unlock the form inputs after payment starts
     function setInputsDisabled(disabled) {
       const ids = [
-        "divisionWomen","divisionMen","teamName",
+        "divisionReverseCoed","teamName",
         "p1First","p1Last","p1Phone","p1Email",
         "p2First","p2Last","p2Phone","p2Email",
         "agreeTerms"
@@ -391,17 +385,14 @@
         const { error } = await stripe.confirmPayment({
           elements,
           confirmParams: {
-            // Stripe will return the user here if extra auth is needed
-            // Stripe will also add ?payment_intent=...&payment_intent_client_secret=... to the URL
             return_url: `${RETURN_URL}?registrationId=${encodeURIComponent(registrationId)}`
           }
         });
 
-        // If confirmPayment returns an error immediately (validation / card issue)
         if (error) {
           showError(error.message || "Payment failed. Please try again.");
           submitBtn.disabled = false;
-          submitBtn.textContent = "Pay $40";
+          submitBtn.textContent = "Pay $2";
         }
         return;
       }
@@ -409,8 +400,8 @@
       // ------------------------------------------------------------
       // STEP 1: First click -> validate form, create PaymentIntent, mount Payment Element
       // ------------------------------------------------------------
-      const division = women.checked ? "Womens" : men.checked ? "Men" : "";
-      if (!division) return showError("Please select Womens or Men.");
+      const division = reverseCoed.checked ? "Reverse Coed Doubles" : "";
+      if (!division) return showError("Please select Reverse Coed Doubles.");
       if (!val("teamName")) return showError("Please enter a team name.");
       if (!document.getElementById("agreeTerms").checked) return showError("You must agree to the Terms & Conditions.");
 
@@ -436,7 +427,6 @@
       };
 
       try {
-        // Call Apps Script to create PaymentIntent + PENDING row
         const res = await fetch(scriptURL, {
           method: "POST",
           mode: "cors",
@@ -449,10 +439,9 @@
 
         registrationId = data.registrationId;
 
-        // Mount Stripe Payment Element into your page
         elements = stripe.elements({
           clientSecret: data.clientSecret,
-          appearance: { theme: "night" } // good match for your dark card
+          appearance: { theme: "night" }
         });
 
         const paymentElement = elements.create("payment");
