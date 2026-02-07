@@ -58,7 +58,8 @@
     .contact-btn:hover {
       background: rgba(255,255,255,0.28);
     }
-        /* Make LIVE EVENT stand out */
+
+    /* Make LIVE EVENT stand out */
     .nav-btn.live-event {
       border: 2px solid #ff2d55;
       background: rgba(255,255,255,0.18);
@@ -143,6 +144,12 @@
       cursor: pointer;
       transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, opacity 160ms ease;
       white-space: nowrap;
+
+      /* ✅ added so <a> looks exactly like a button */
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .tab-btn:hover {
@@ -309,51 +316,66 @@
       border-color: rgba(0,0,0,0.30);
     }
 
-    /* Playoffs lock box */
-    .lock-box {
-      border: 1px dashed rgba(0,0,0,0.22);
-      border-radius: var(--radius);
-      padding: 16px;
+    /* Teams preview table */
+    .teams-mini-wrap{
+      margin-top: 8px;
+      border: 1px solid rgba(0,0,0,0.10);
+      border-radius: 16px;
+      overflow: hidden;
       background: rgba(0,0,0,0.02);
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-      color: #111827;
     }
 
-    .lock-title {
-      margin: 0;
-      font-size: 16px;
+    .teams-mini{
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .teams-mini thead th{
+      text-align: left;
+      padding: 6px 12px;
+      background: rgba(0,0,0,0.04);
+      border-bottom: 1px solid rgba(0,0,0,0.10);
+      color: rgba(0,0,0,0.72);
+      font-weight: 900;
+      letter-spacing: 0.2px;
+    }
+
+    .teams-mini tbody td{
+      padding: 6px 12px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      vertical-align: middle;
+      color: #0b1220;
+      line-height: 1.05;
+    }
+
+    .teams-mini tbody tr:last-child td{
+      border-bottom: none;
+    }
+
+    .place-pill{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 56px;
+      height: 28px;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: 2px solid rgba(0,0,0,0.10);
+      background: #ffffff;
+      font-weight: 900;
+      color: rgba(0,0,0,0.70);
+    }
+
+    .team-cell{
       font-weight: 900;
       color: #0b1220;
     }
 
-    .lock-text {
-      margin: 6px 0 0 0;
-      color: rgba(0,0,0,0.62);
-      font-size: 14px;
-      line-height: 1.5;
-      max-width: 640px;
-    }
-
-    .lock-btn {
-      appearance: none;
-      border: none;
-      padding: 14px 18px;
-      font-size: 14px;
-      background: #0b1220;
-      color: #ffffff;
-      border-radius: 999px;
-      cursor: pointer;
-      font-weight: bold;
+    .team-muted{
+      color: rgba(0,0,0,0.55);
+      font-weight: 900;
       white-space: nowrap;
-    }
-
-    .lock-btn:hover {
-      opacity: 0.92;
     }
 
     /* --- MOBILE FIXES (PUT THIS AT THE VERY BOTTOM) --- */
@@ -439,26 +461,21 @@
   <div class="hero">
     <div class="hero-content">
       <h1>LIVE EVENT</h1>
-      <p class="lead">
-        Pools and live scoring. Choose Men or Women, then go to Pool 1 or Pool 2.
-        Playoffs stays locked until you publish the bracket.
-      </p>
 
       <div class="live-card">
         <!-- Tabs -->
         <div class="tabs" role="tablist" aria-label="Live Event Tabs">
-          <button class="tab-btn active" id="tabPools" role="tab" aria-selected="true" aria-controls="panelPools">Pools</button>
-          <button class="tab-btn disabled" id="tabPlayoffs" role="tab" aria-selected="false" aria-controls="panelPlayoffs" disabled>Playoffs</button>
+          <button class="tab-btn active" id="tabPools" type="button">Pools</button>
+
+          <!-- ✅ WHEN READY TO SHOW PLAYOFFS: uncomment the next line Bitch -->
+          <!--<a class="tab-btn" id="tabPlayoffs" href="playoff.html">Playoffs</a>-->
         </div>
 
         <!-- Pools Panel -->
-        <div id="panelPools" role="tabpanel" aria-labelledby="tabPools">
+        <div id="panelPools">
           <div class="section-head">
             <div>
               <h2 class="section-title">Pools</h2>
-              <p class="section-note">
-                Choose a tournament, then go to Pool 1 or Pool 2. (Later, this can be powered by Google Sheets.)
-              </p>
             </div>
 
             <div class="toggle" aria-label="Tournament Toggle">
@@ -472,130 +489,190 @@
           </div>
         </div>
 
-        <!-- Playoffs Panel -->
-        <div id="panelPlayoffs" role="tabpanel" aria-labelledby="tabPlayoffs" style="display:none;">
-          <div class="section-head">
-            <div>
-              <h2 class="section-title">Playoffs</h2>
-              <p class="section-note">This stays locked until you publish the bracket.</p>
-            </div>
-          </div>
-
-          <div class="lock-box">
-            <div>
-              <p class="lock-title">Bracket not published yet 🔒</p>
-              <p class="lock-text">
-                When you’re ready, you’ll flip a “published” flag in Google Sheets and this tab becomes clickable.
-                For now, it’s disabled so players don’t see an unfinished bracket.
-              </p>
-            </div>
-            <button class="lock-btn" type="button" id="demoPublishBtn">Demo: Publish Bracket</button>
-          </div>
-        </div>
-
       </div>
     </div>
   </div>
 
   <script>
-    // ====== DEMO DATA (Replace later with Sheets fetch) ======
-    const POOLS_BY_TOURNAMENT = {
-      men: [
-        { pool: 1, title: "Pool 1", desc: "4 teams • 6 matches", badge: "Men • Pool 1" },
-        { pool: 2, title: "Pool 2", desc: "4 teams • 6 matches", badge: "Men • Pool 2" }
-      ],
-      women: [
-        { pool: 1, title: "Pool 1", desc: "4 teams • 6 matches", badge: "Women • Pool 1" },
-        { pool: 2, title: "Pool 2", desc: "4 teams • 6 matches", badge: "Women • Pool 2" }
-      ]
-    };
+    // ===========================
+    // PUT YOUR REAL VALUES HERE
+    // ===========================
+    // Use the SAME WEB_APP_URL you already use in pool.html
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwYxZH7UAUUd96KhxPqvMf6XCEYc5s0_2hkVQcZs74bCar53vWDrNQ35_E5NtTL40ORuA/exec";
 
     // ====== STATE ======
     let tournament = "men";
-    let playoffsPublished = false; // later: load from Google Sheets
 
     // ====== ELEMENTS ======
-    const tabPools = document.getElementById("tabPools");
-    const tabPlayoffs = document.getElementById("tabPlayoffs");
-    const panelPools = document.getElementById("panelPools");
-    const panelPlayoffs = document.getElementById("panelPlayoffs");
-
     const btnMen = document.getElementById("btnMen");
     const btnWomen = document.getElementById("btnWomen");
     const poolGrid = document.getElementById("poolGrid");
 
+    // ====== HELPERS ======
+    async function fetchJSON(url) {
+      const res = await fetch(url);
+      return await res.json();
+    }
+
+    function escapeHTML(str) {
+      return String(str || "").replace(/[&<>"']/g, (ch) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[ch]));
+    }
+
+    // Accepts "women" or "womens"
+    function normalizeTournamentKey(t) {
+      const x = String(t || "").trim().toLowerCase();
+      return (x === "women") ? "women" : "men";
+    }
+
+    function labelTournament(t) {
+      return t === "women" ? "Women" : "Men";
+    }
+
+    // Backend: returns only pools that exist
+    async function fetchPoolsList(tKey) {
+      const url = `${WEB_APP_URL}?action=getPoolsList&tournament=${encodeURIComponent(tKey)}&ts=${Date.now()}`;
+      const data = await fetchJSON(url);
+      if (!data || !data.ok) throw new Error((data && data.error) ? data.error : "getPoolsList failed");
+      return data.pools || [];
+    }
+
+    // Load teams for one pool (for preview table)
+    async function fetchPoolTeams(tKey, poolNo) {
+      const url = `${WEB_APP_URL}?action=getPool&tournament=${encodeURIComponent(tKey)}&pool=${encodeURIComponent(poolNo)}&ts=${Date.now()}`;
+      const data = await fetchJSON(url);
+      if (!data || !data.ok) throw new Error((data && data.error) ? data.error : "getPool failed");
+      return data.teams || [];
+    }
+
     // ====== RENDER POOLS ======
-    function renderPools() {
-      poolGrid.innerHTML = "";
-      const pools = POOLS_BY_TOURNAMENT[tournament];
+    async function renderPools() {
+      poolGrid.innerHTML = `<div class="pool-desc">Loading pools…</div>`;
 
-      pools.forEach(p => {
-        const card = document.createElement("div");
-        card.className = "pool-card";
+      const tKey = normalizeTournamentKey(tournament);
+      const tLabel = labelTournament(tKey);
 
-        // Link uses query params (so you don't need Pool1Men.html, etc.)
-        const href = `pool.html?tournament=${encodeURIComponent(tournament)}&pool=${encodeURIComponent(p.pool)}`;
+      try {
+        const pools = await fetchPoolsList(tKey);
 
-        card.innerHTML = `
-          <div class="pool-top">
-            <h3 class="pool-name">${p.title}</h3>
-            <span class="pill">${p.badge}</span>
+        poolGrid.innerHTML = "";
+
+        if (!pools.length) {
+          poolGrid.innerHTML = `
+            <div class="pool-card">
+              <div class="pool-top">
+                <h3 class="pool-name">No pools yet</h3>
+                <span class="pill">${tLabel}</span>
+              </div>
+              <p class="pool-desc">No pools found for this tournament.</p>
+            </div>
+          `;
+          return;
+        }
+
+        pools.forEach(p => {
+          const poolNo = p.pool;
+
+          const card = document.createElement("div");
+          card.className = "pool-card";
+
+          const href = `pool.html?tournament=${encodeURIComponent(tKey)}&pool=${encodeURIComponent(poolNo)}`;
+          const tbodyId = `teamsBody_${tKey}_${poolNo}`.replace(/[^a-z0-9_]/gi, "_");
+
+          card.innerHTML = `
+            <div class="pool-top">
+              <h3 class="pool-name">Pool ${poolNo}</h3>
+              <span class="pill">${tLabel} • Pool ${poolNo}</span>
+
+              <table class="teams-mini" aria-label="Pool teams preview">
+                <thead>
+                  <tr>
+                    <th style="width:110px;">Place</th>
+                    <th>Team</th>
+                  </tr>
+                </thead>
+                <tbody id="${tbodyId}">
+                  <tr>
+                    <td><span class="place-pill">—</span></td>
+                    <td class="team-cell team-muted">Loading…</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <a class="pool-btn" href="${href}">Go to Pool</a>
+          `;
+
+          poolGrid.appendChild(card);
+
+          fetchPoolTeams(tKey, poolNo)
+            .then((teams) => {
+              const tbody = document.getElementById(tbodyId);
+              if (!tbody) return;
+
+              if (!teams.length) {
+                tbody.innerHTML = `
+                  <tr>
+                    <td><span class="place-pill">—</span></td>
+                    <td class="team-cell team-muted">No teams yet</td>
+                  </tr>
+                `;
+                return;
+              }
+
+              tbody.innerHTML = teams.map((name, idx) => `
+                <tr>
+                  <td><span class="place-pill">${idx + 1}</span></td>
+                  <td class="team-cell">${escapeHTML(name)}</td>
+                </tr>
+              `).join("");
+            })
+            .catch(() => {
+              const tbody = document.getElementById(tbodyId);
+              if (tbody) {
+                tbody.innerHTML = `
+                  <tr>
+                    <td><span class="place-pill">—</span></td>
+                    <td class="team-cell team-muted">Couldn’t load teams</td>
+                  </tr>
+                `;
+              }
+            });
+        });
+
+      } catch (err) {
+        poolGrid.innerHTML = `
+          <div class="pool-card">
+            <div class="pool-top">
+              <h3 class="pool-name">Couldn’t load pools</h3>
+              <span class="pill">${tLabel}</span>
+            </div>
+            <p class="pool-desc">
+              ${err && err.message ? err.message : "Unknown error"}
+            </p>
           </div>
-          <p class="pool-desc">${p.desc}</p>
-          <a class="pool-btn" href="${href}">Go to Pool</a>
         `;
-
-        poolGrid.appendChild(card);
-      });
+      }
     }
 
     // ====== TOURNAMENT TOGGLE ======
-    function setTournament(next) {
+    async function setTournament(next) {
       tournament = next;
       btnMen.classList.toggle("active", tournament === "men");
       btnWomen.classList.toggle("active", tournament === "women");
-      renderPools();
+      await renderPools();
     }
 
     btnMen.addEventListener("click", () => setTournament("men"));
     btnWomen.addEventListener("click", () => setTournament("women"));
 
-    // ====== TABS ======
-    function openTab(which) {
-      const isPools = which === "pools";
-
-      tabPools.classList.toggle("active", isPools);
-      tabPools.setAttribute("aria-selected", String(isPools));
-      panelPools.style.display = isPools ? "" : "none";
-
-      tabPlayoffs.classList.toggle("active", !isPools);
-      tabPlayoffs.setAttribute("aria-selected", String(!isPools));
-      panelPlayoffs.style.display = !isPools ? "" : "none";
-    }
-
-    tabPools.addEventListener("click", () => openTab("pools"));
-
-    tabPlayoffs.addEventListener("click", () => {
-      if (!playoffsPublished) return;
-      openTab("playoffs");
-    });
-
-    // ====== PUBLISH PLAYOFFS (DEMO ONLY) ======
-    function applyPlayoffsLock() {
-      tabPlayoffs.disabled = !playoffsPublished;
-      tabPlayoffs.classList.toggle("disabled", !playoffsPublished);
-      tabPlayoffs.title = playoffsPublished ? "" : "Playoffs locked until bracket is published";
-    }
-
-    document.getElementById("demoPublishBtn").addEventListener("click", () => {
-      playoffsPublished = true;
-      applyPlayoffsLock();
-      openTab("playoffs");
-    });
-
     // ====== INIT ======
-    renderPools();
-    applyPlayoffsLock();
+    setTournament("men");
   </script>
 </body>
 </html>
