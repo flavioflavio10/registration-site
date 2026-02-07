@@ -59,6 +59,17 @@
       background: rgba(255,255,255,0.28);
     }
 
+    .nav-btn.live-event {
+      border: 2px solid #ff2d55;
+      background: rgba(255,255,255,0.18);
+      box-shadow: 0 0 0 rgba(255,45,85,0);
+    }
+
+    .nav-btn.live-event:hover {
+      background: rgba(255,255,255,0.26);
+      box-shadow: 0 0 0 4px rgba(255,45,85,0.18);
+    }
+
     /* HERO (same background as index) */
     .hero {
       min-height: calc(100vh - 100px);
@@ -326,6 +337,49 @@
       border-color: rgba(0,0,0,0.30);
     }
 
+    /* ===== Round Groups (NEW + FIXED) ===== */
+    .round-group{
+      margin-top: 12px;
+      border: 1px solid rgba(0,0,0,0.10);
+      border-radius: 16px;
+      padding: 12px;
+      background: rgba(0,0,0,0.02);
+    }
+    .round-group:first-child{ margin-top: 0; }
+
+    .round-head{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .round-title{
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.65);
+    }
+
+    .round-meta{
+      font-size: 12px;
+      font-weight: 900;
+      color: rgba(0,0,0,0.55);
+      background: rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.10);
+      border-radius: 999px;
+      padding: 6px 10px;
+      white-space: nowrap;
+    }
+
+    /* Make first match row inside each round not show a top border */
+    .round-group .match-row:first-of-type{
+      border-top: none;
+      padding-top: 0;
+    }
+
     .error {
       background: rgba(255,0,0,0.08);
       border: 1px solid rgba(255,0,0,0.22);
@@ -400,7 +454,7 @@
       <a href="index.html" class="nav-btn">HOME</a>
       <a href="contact.html" class="contact-btn">ABOUT</a>
       <a href="rules.html" class="nav-btn">RULES</a>
-      <a href="liveevent.html" class="nav-btn">LIVE EVENT</a>
+      <a href="liveevent.html" class="nav-btn live-event">LIVE EVENT</a>
     </div>
   </div>
 
@@ -420,8 +474,6 @@
           <!-- Teams -->
           <div class="subcard">
             <h2>Teams</h2>
-            <p class="muted">Teams in this pool.</p>
-
             <div class="teams-table-wrap">
               <table class="teams-table" aria-label="Pool standings table">
                 <thead>
@@ -445,7 +497,7 @@
           <!-- Matches -->
           <div class="subcard">
             <h2>Matches</h2>
-            <p class="muted">Pool matches (6 total). Click “Keep Score” to open the scorekeeper.</p>
+            <p class="muted">Click “Keep Score” to open the scorekeeper.</p>
 
             <div id="matchesWrap">
               <div class="match-row">
@@ -495,8 +547,9 @@
       errorBox.textContent = msg;
     }
 
+    // Accepts "women" or "womens"
     function formatTournament(t) {
-      return t === "women" ? "WOMEN" : "MEN";
+      return (t === "women" || t === "womens") ? "WOMEN" : "MEN";
     }
 
     async function fetchJSON(url) {
@@ -504,14 +557,65 @@
       return await res.json();
     }
 
+    // ✅ FIX: always get a real round number
+    // Uses roundNo if present, otherwise derives from matchNo (1-2=R1, 3-4=R2, 5-6=R3)
+    function getRoundNo(m) {
+      const raw = (m.roundNo ?? m.round ?? m.roundno ?? m.round_number ?? m.roundNumber);
+      const parsed = Number(raw);
+      if (Number.isFinite(parsed) && parsed > 0) return parsed;
+
+      const mn = Number(m.matchNo);
+      if (Number.isFinite(mn) && mn > 0) return Math.ceil(mn / 2);
+
+      return 0;
+    }
+
+    // ✅ NEW (minimal): score helpers for 1-set or 2-set matches
+    function getSetsPerMatch(m) {
+      const spm = Number(m.setsPerMatch || 1);
+      return (spm === 2) ? 2 : 1;
+    }
+
+    function getSet1A(m){ return (m.set1A != null ? m.set1A : m.scoreA); }
+    function getSet1B(m){ return (m.set1B != null ? m.set1B : m.scoreB); }
+
+    function isMatchComplete(m) {
+      const spm = getSetsPerMatch(m);
+
+      if (spm === 2) {
+        return (m.set1A != null && m.set1B != null && m.set2A != null && m.set2B != null);
+      }
+
+      const a = getSet1A(m);
+      const b = getSet1B(m);
+      return (a != null && b != null);
+    }
+
+    function formatScoreText(m) {
+      const spm = getSetsPerMatch(m);
+
+      if (!isMatchComplete(m)) return "Score: —";
+
+      if (spm === 2) {
+        const s1a = Number(m.set1A);
+        const s1b = Number(m.set1B);
+        const s2a = Number(m.set2A);
+        const s2b = Number(m.set2B);
+        return `Score: S1 ${s1a}-${s1b} | S2 ${s2a}-${s2b}`;
+      }
+
+      const a = Number(getSet1A(m));
+      const b = Number(getSet1B(m));
+      return `Score: ${a}-${b}`;
+    }
+
     async function loadPool() {
       const tLabel = formatTournament(tournament);
 
       pageTitle.textContent = `${tLabel} • POOL ${pool}`;
       pillInfo.textContent = `${tLabel} • Pool ${pool}`;
-      pageLead.textContent = `Pool info for ${tLabel} Pool ${pool}.`;
+      pageLead.textContent = ``;
 
-      // ✅ NEW: single call to getPoolState (ts busts cache)
       const stateURL = `${WEB_APP_URL}?action=getPoolState&tournament=${encodeURIComponent(tournament)}&pool=${encodeURIComponent(pool)}&ts=${Date.now()}`;
 
       let stateData;
@@ -552,22 +656,62 @@
         });
       }
 
-      // ✅ Render matches (real score badge + button label)
-      const matches = stateData.matches || [];
+      // ✅ Render matches grouped by round (FIXED)
+      const matches = (stateData.matches || []).slice();
       matchesWrap.innerHTML = "";
 
       if (matches.length === 0) {
         matchesWrap.innerHTML = `<div class="muted">No matches found (check your Matches sheet).</div>`;
-      } else {
-        matches.forEach(m => {
+        return;
+      }
+
+      // Sort by round then matchNo
+      matches.sort((a, b) => {
+        const ar = getRoundNo(a);
+        const br = getRoundNo(b);
+        if (ar !== br) return ar - br;
+        return (Number(a.matchNo) || 0) - (Number(b.matchNo) || 0);
+      });
+
+      // Group by round
+      const roundMap = new Map();
+      matches.forEach(m => {
+        const r = getRoundNo(m);
+        if (!roundMap.has(r)) roundMap.set(r, []);
+        roundMap.get(r).push(m);
+      });
+
+      const roundKeys = Array.from(roundMap.keys()).sort((a, b) => a - b);
+
+      roundKeys.forEach(r => {
+        const group = document.createElement("div");
+        group.className = "round-group";
+
+        const head = document.createElement("div");
+        head.className = "round-head";
+
+        const title = document.createElement("div");
+        title.className = "round-title";
+        title.textContent = r > 0 ? `Round ${r}` : "Round";
+
+        const meta = document.createElement("div");
+        meta.className = "round-meta";
+        const count = roundMap.get(r).length;
+        meta.textContent = `${count} match${count === 1 ? "" : "es"}`;
+
+        head.appendChild(title);
+        head.appendChild(meta);
+        group.appendChild(head);
+
+        roundMap.get(r).forEach(m => {
           const row = document.createElement("div");
           row.className = "match-row";
 
-          const hasScore = (m.scoreA !== null && m.scoreB !== null);
-          const scoreText = hasScore ? `Score: ${m.scoreA}-${m.scoreB}` : "Score: —";
+          // ✅ CHANGED (minimal): score display now supports 2 sets
+          const hasScore = isMatchComplete(m);
+          const scoreText = formatScoreText(m);
 
           const refText = m.teamC ? `Ref: ${m.teamC}` : "Ref: —";
-
           const href = `score.html?matchId=${encodeURIComponent(m.matchId)}`;
 
           row.innerHTML = `
@@ -582,9 +726,11 @@
             </div>
           `;
 
-          matchesWrap.appendChild(row);
+          group.appendChild(row);
         });
-      }
+
+        matchesWrap.appendChild(group);
+      });
     }
 
     loadPool();
