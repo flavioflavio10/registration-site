@@ -439,6 +439,19 @@
         grid-template-columns: 1fr;
       }
     }
+
+        /* Score bubble turns green when a score exists */
+    .score-badge.is-scored{
+      background: rgba(16,185,129,0.16);   /* soft green */
+      border-color: rgba(16,185,129,0.45);
+      color: #065f46;                      /* dark green text */
+    }
+
+    /* optional: a tiny "glow" so it pops more */
+    .score-badge.is-scored{
+      box-shadow: 0 0 0 3px rgba(16,185,129,0.10);
+    }
+
   </style>
 </head>
 
@@ -720,7 +733,7 @@
               <div class="match-teams">${m.teamA} vs ${m.teamB}</div>
             </div>
             <div class="match-actions">
-              <span class="score-badge">${scoreText}</span>
+              <span class="score-badge ${hasScore ? "is-scored" : ""}">${scoreText}</span>
               <span class="score-badge">${refText}</span>
               <a class="keep-btn" href="${href}">${hasScore ? "Edit Score" : "Keep Score"}</a>
             </div>
