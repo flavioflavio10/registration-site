@@ -266,7 +266,7 @@
   <!-- HERO + ABOUT -->
   <div class="hero">
     <div class="hero-content">
-      <h1>WINTER FEST</h1>
+      <h1>GRASS MELTDOWN</h1>
       <p class="lead"></p>
 
       <div class="grid">
@@ -276,19 +276,19 @@
           <h2></h2>
 
           <div class="info-row">
-            <strong>WINTER FEST - M/F Doubles</strong><br>
-            <strong>Date:</strong> Saturday Febuary 7th<br>
+            <strong>GRASS MELTDOWN - M/F Doubles</strong><br>
+            <strong>Date:</strong> Saturday Febuary 28th<br>
             <strong>Start Time:</strong> 8:30 AM<br>
-            <strong>Location:</strong> Caldwell Soccer Park, Redding, CA<br><br>
+            <strong>Location:</strong> Caldwell Park, Redding, CA (Soccer Field)<br><br>
 
             <strong>Format:</strong> Men’s Doubles and Women’s Doubles<br>
             <strong>Capacity:</strong> 12 teams per gender<br>
             <strong>Cost:</strong> $20 per player ($40 per team)<br>
             <strong>Cash Prices!</strong><br>
-            Registration opened until Feb 6th, 12pm<br><br>
+            Registration opened until Feb 27th, 10pm<br><br>
 
-            <strong>Men Teams Registered:</strong> 6/12<br>
-            <strong>Women Teams Registered:</strong> 6/12
+            <strong>Men Teams Registered:</strong> <span id="menCount">0</span>/12<br>
+            <strong>Women Teams Registered:</strong> <span id="womenCount">0</span>/12
 
 
             <div class="cta-row">
@@ -312,6 +312,30 @@
       </div>
     </div>
   </div>
+<script>
+  // ✅ PASTE your Apps Script Web App URL below
+  // It looks like: https://script.google.com/macros/s/XXXXX/exec
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYxZH7UAUUd96KhxPqvMf6XCEYc5s0_2hkVQcZs74bCar53vWDrNQ35_E5NtTL40ORuA/exec";
+
+  async function loadRegistrationCounts() {
+    try {
+      const url = `${APPS_SCRIPT_URL}?action=getRegistrationCounts`;
+      const res = await fetch(url, { cache: "no-store" });
+      const data = await res.json();
+
+      if (!data.ok) throw new Error(data.error || "API returned ok:false");
+
+      document.getElementById("menCount").textContent = data.men ?? 0;
+      document.getElementById("womenCount").textContent = data.women ?? 0;
+    } catch (err) {
+      console.error("Failed to load registration counts:", err);
+      // leave defaults if it fails
+    }
+  }
+
+  loadRegistrationCounts();
+  setInterval(loadRegistrationCounts, 30000); // refresh every 30s (optional)
+</script>
 
 </body>
 </html>
