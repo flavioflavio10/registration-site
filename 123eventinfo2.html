@@ -266,7 +266,7 @@
   <!-- HERO + ABOUT -->
   <div class="hero">
     <div class="hero-content">
-      <h1>WINTER FEST</h1>
+      <h1>GRASS MELTDOWN</h1>
       <p class="lead"></p>
 
       <div class="grid">
@@ -276,18 +276,18 @@
           <h2></h2>
 
           <div class="info-row">
-            <strong>WINTER FEST - Reverse Coed Doubles</strong><br>
-            <strong>Date:</strong> Sunday Febuary 8th<br>
+            <strong>GRASS MELTDOWN - Reverse Coed Doubles</strong><br>
+            <strong>Date:</strong> Sunday March 1st<br>
             <strong>Start Time:</strong> 8:30 AM<br>
-            <strong>Location:</strong> Caldwell Soccer Park, Redding, CA<br><br>
+            <strong>Location:</strong> Caldwell Park, Redding, CA (Soccer Field)<br><br>
 
             <strong>Format:</strong> Reverse Coed Doubles<br>
             <strong>Capacity:</strong> 12 teams<br>
             <strong>Cost:</strong> $20 per player ($40 per team)<br>
             <strong>Cash Prices!</strong><br>
-            Registration opened until Feb 7th, 11pm<br><br>
+            Registration opened until Feb 28th, 10pm<br><br>
 
-            <strong>Teams Registered:</strong> 4/12<br>
+            <strong>Teams Registered:</strong> <span id="coedCount">0</span>/12<br>
 
 
             <div class="cta-row">
@@ -311,6 +311,28 @@
       </div>
     </div>
   </div>
+<script>
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYxZH7UAUUd96KhxPqvMf6XCEYc5s0_2hkVQcZs74bCar53vWDrNQ35_E5NtTL40ORuA/exec";
+
+  async function loadCoedCount() {
+    try {
+      // key should match what your payload.division contains
+      // example: "coed" or "reverse coed"
+      const url = `${APPS_SCRIPT_URL}?action=getCoedCount&key=coed`;
+      const res = await fetch(url, { cache: "no-store" });
+      const data = await res.json();
+
+      if (!data.ok) throw new Error(data.error || "API returned ok:false");
+
+      document.getElementById("coedCount").textContent = data.count ?? 0;
+    } catch (err) {
+      console.error("Failed to load coed count:", err);
+    }
+  }
+
+  loadCoedCount();
+  setInterval(loadCoedCount, 30000);
+</script>
 
 </body>
 </html>
