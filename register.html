@@ -402,7 +402,7 @@
         if (error) {
           showError(error.message || "Payment failed. Please try again.");
           submitBtn.disabled = false;
-          submitBtn.textContent = "Pay $40";
+          submitBtn.textContent = "Pay $50";
         }
         return;
       }
@@ -464,7 +464,7 @@
         showSuccess("Payment loaded. Enter your payment info below.");
 
         submitBtn.disabled = false;
-        submitBtn.textContent = "Pay $40";
+        submitBtn.textContent = "Pay $50";
 
       } catch (err) {
         console.error(err);
