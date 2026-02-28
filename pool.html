@@ -678,25 +678,30 @@
         return;
       }
 
-      // Sort by round then matchNo
+            // ✅ OPTION A: "Round" = roundNo from Matches sheet
+      // Pull nets from backend if you send it; otherwise default to 2
+      const nets = Math.max(1, Number(stateData.nets || stateData.poolConfig?.nets || 2));
+
+      // 1) Sort by roundNo then matchNo (so it displays in the correct order)
       matches.sort((a, b) => {
-        const ar = getRoundNo(a);
-        const br = getRoundNo(b);
-        if (ar !== br) return ar - br;
+        const ra = getRoundNo(a) || 0;
+        const rb = getRoundNo(b) || 0;
+        if (ra !== rb) return ra - rb;
         return (Number(a.matchNo) || 0) - (Number(b.matchNo) || 0);
       });
 
-      // Group by round
+      // 2) Group matches by roundNo (this uses your Matches sheet last column)
       const roundMap = new Map();
       matches.forEach(m => {
-        const r = getRoundNo(m);
+        const r = getRoundNo(m) || 1;
         if (!roundMap.has(r)) roundMap.set(r, []);
         roundMap.get(r).push(m);
       });
 
       const roundKeys = Array.from(roundMap.keys()).sort((a, b) => a - b);
 
-      roundKeys.forEach(r => {
+      // 3) Render
+      roundKeys.forEach(roundNo => {
         const group = document.createElement("div");
         group.className = "round-group";
 
@@ -705,22 +710,21 @@
 
         const title = document.createElement("div");
         title.className = "round-title";
-        title.textContent = r > 0 ? `Round ${r}` : "Round";
+        title.textContent = `Round ${roundNo}`;
 
         const meta = document.createElement("div");
         meta.className = "round-meta";
-        const count = roundMap.get(r).length;
+        const count = roundMap.get(roundNo).length;
         meta.textContent = `${count} match${count === 1 ? "" : "es"}`;
 
         head.appendChild(title);
         head.appendChild(meta);
         group.appendChild(head);
 
-        roundMap.get(r).forEach(m => {
+        roundMap.get(roundNo).forEach(m => {
           const row = document.createElement("div");
           row.className = "match-row";
 
-          // ✅ CHANGED (minimal): score display now supports 2 sets
           const hasScore = isMatchComplete(m);
           const scoreText = formatScoreText(m);
 
@@ -744,9 +748,13 @@
 
         matchesWrap.appendChild(group);
       });
+
+
     }
 
     loadPool();
   </script>
 </body>
 </html>
+
+
