@@ -186,7 +186,7 @@
     .bracket-grid{
       position: relative;
       display: grid;
-      grid-template-columns: 280px 280px 280px 220px;
+      grid-template-columns: 280px 280px 280px 280px 220px;
       gap: 26px;
       align-items: start;
       min-height: 520px;
@@ -604,7 +604,7 @@
 
       /* make the whole bracket wider than the phone so it can scroll */
       .bracket-grid{
-        grid-template-columns: 220px 220px 220px 200px;  /* narrower columns */
+        grid-template-columns: 220px 220px 220px 220px 200px;  /* narrower columns */
         gap: 14px;
         min-height: 420px;
         width: max-content; /* allows horizontal scrolling */
@@ -1332,6 +1332,22 @@ function showModalStep(step){
     function renderBracket(state){
       bracketGrid.innerHTML = "";
 
+      const hasR16 = Array.isArray(state.roundOf16) && state.roundOf16.length > 0;
+
+      // Round of 16 (optional)
+      let colR16 = null;
+      if (hasR16){
+        colR16 = document.createElement("div");
+        colR16.className = "round-col";
+        colR16.innerHTML = `
+          <div class="round-head">
+            <span>Round of 16</span>
+            <span class="round-chip">${(state.roundOf16 || []).length} matches</span>
+          </div>
+        `;
+        (state.roundOf16 || []).forEach(m => colR16.appendChild(renderMatchCard(m, m.title)));
+      }
+
       // Quarterfinals
       const colQF = document.createElement("div");
       colQF.className = "round-col";
@@ -1341,8 +1357,17 @@ function showModalStep(step){
           <span class="round-chip">${(state.quarterfinals || []).length} matches</span>
         </div>
       `;
+      (state.quarterfinals || []).forEach(m => {
+        // ✅ If Round of 16 exists, add spacers so QFs can be centered between their parents
+        if (hasR16){
+          const spacer = document.createElement("div");
+          spacer.className = "slot-spacer";
+          spacer.id = `spacer_${m.key}`; // spacer_QF1..spacer_QF4
+          colQF.appendChild(spacer);
+        }
 
-      (state.quarterfinals || []).forEach(m => colQF.appendChild(renderMatchCard(m, m.title)));
+        colQF.appendChild(renderMatchCard(m, m.title));
+      });
 
       // Semifinals
       const colSF = document.createElement("div");
@@ -1362,7 +1387,6 @@ function showModalStep(step){
         colSF.appendChild(renderMatchCard(m, m.title));
       });
 
-
       // Final
       const colF = document.createElement("div");
       colF.className = "round-col";
@@ -1373,7 +1397,6 @@ function showModalStep(step){
         </div>
       `;
 
-      // ✅ Support either: final: { ... } OR final: [ ... ]
       const finals = Array.isArray(state.final)
         ? state.final
         : (state.final ? [state.final] : []);
@@ -1386,9 +1409,6 @@ function showModalStep(step){
 
         colF.appendChild(renderMatchCard(m, m.title));
       });
-
-
-
 
       // Winner
       const colW = document.createElement("div");
@@ -1406,19 +1426,20 @@ function showModalStep(step){
 
       colW.appendChild(renderWinnerBox(state.winner));
 
-
-      bracketGrid.append(colQF, colSF, colF, colW);
+      if (hasR16) bracketGrid.append(colR16, colQF, colSF, colF, colW);
+      else bracketGrid.append(colQF, colSF, colF, colW);
 
       setTimeout(() => {
         alignBracket();
         drawLines();
       }, 0);
-
     }
 
     function alignBracket(){
-      // Reset all spacer heights (so re-aligning doesn't stack)
-      ["spacer_SF1","spacer_SF2","spacer_F1","spacer_WIN"].forEach(id => {
+      const hasR16 = !!document.getElementById("card_R16_1");
+
+      // Reset spacer heights
+      ["spacer_QF1","spacer_QF2","spacer_QF3","spacer_QF4","spacer_SF1","spacer_SF2","spacer_F1","spacer_WIN"].forEach(id => {
         const sp = document.getElementById(id);
         if (sp) sp.style.height = "0px";
       });
@@ -1434,12 +1455,19 @@ function showModalStep(step){
 
         const cur = centerY(el);
         const delta = targetCenterY - cur;
-
-        // Only push DOWN (no negative heights)
         sp.style.height = `${Math.max(0, Math.round(delta))}px`;
       }
 
+      function avgCenterY(a, b){
+        const list = [a, b].filter(Boolean);
+        if (!list.length) return null;
+        const sum = list.map(centerY).reduce((x,y)=>x+y, 0);
+        return sum / list.length;
+      }
+
       // Grab elements
+      const r16 = hasR16 ? Array.from({length:8}, (_,i)=>document.getElementById(`card_R16_${i+1}`)) : [];
+
       const qf1 = document.getElementById("card_QF1");
       const qf2 = document.getElementById("card_QF2");
       const qf3 = document.getElementById("card_QF3");
@@ -1451,30 +1479,38 @@ function showModalStep(step){
 
       const winnerBox = bracketGrid.querySelector(".winner-box");
 
-      // ---- Pass 1: align semis between their QFs ----
-      // ---- Pass 1: align semis between their QFs (works for BYE / missing QF) ----
-      function avgCenterY(a, b){
-        const list = [a, b].filter(Boolean);
-        if (!list.length) return null;
-        const sum = list.map(centerY).reduce((x,y)=>x+y, 0);
-        return sum / list.length;
+      // ---- Pass 0 (NEW): align QFs between their R16 parents ----
+      // ---- Pass 0 (NEW): align QFs between their R16 parents ----
+      // ---- Pass 0: align QFs between their R16 parents (works for 4 or 8 R16 matches) ----
+      if (hasR16){
+        const qfs = [qf1, qf2, qf3, qf4];
+
+        for (let i = 0; i < 4; i++){
+          const qfEl = qfs[i];
+          if (!qfEl) continue;
+
+          const p1 = r16[i*2] || null;
+          const p2 = r16[i*2 + 1] || null;
+
+          const target = avgCenterY(p1, p2);
+          if (target != null){
+            setSpacerToMoveDown(`spacer_QF${i+1}`, qfEl, target);
+            qfEl.getBoundingClientRect();
+          }
+        }
       }
 
+      // ---- Pass 1: align semis between their QFs ----
       if (sf1){
-        const target = avgCenterY(qf1, qf2); // if one missing, uses the one that exists
+        const target = avgCenterY(qf1, qf2);
         if (target != null) setSpacerToMoveDown("spacer_SF1", sf1, target);
       }
-
-      // force layout update before next measurements
       if (sf1) sf1.getBoundingClientRect();
 
       if (sf2){
         const target = avgCenterY(qf3, qf4);
         if (target != null) setSpacerToMoveDown("spacer_SF2", sf2, target);
       }
-
-
-      // force layout update
       if (sf2) sf2.getBoundingClientRect();
 
       // ---- Pass 2: align final between SF1 + SF2 ----
@@ -1482,8 +1518,6 @@ function showModalStep(step){
         const target = (centerY(sf1) + centerY(sf2)) / 2;
         setSpacerToMoveDown("spacer_F1", f1, target);
       }
-
-      // force layout update
       if (f1) f1.getBoundingClientRect();
 
       // ---- Pass 3: align winner box with final ----
@@ -1501,7 +1535,6 @@ function showModalStep(step){
 
       const wrapRect = bracketWrap.getBoundingClientRect();
 
-      // Make SVG match the scrollable bracketWrap content size (not just viewport size)
       const w = bracketWrap.scrollWidth;
       const h = bracketWrap.scrollHeight;
 
@@ -1509,7 +1542,6 @@ function showModalStep(step){
       linesSvg.setAttribute("height", h);
       linesSvg.setAttribute("viewBox", `0 0 ${w} ${h}`);
 
-      // Helper: get anchor point (right-middle or left-middle) relative to bracketWrap
       function anchor(el, side){
         if (!el) return null;
         const r = el.getBoundingClientRect();
@@ -1523,7 +1555,6 @@ function showModalStep(step){
         return { x, y };
       }
 
-      // Draw a smooth elbow line from A → B
       function connect(aEl, bEl){
         const a = anchor(aEl, "right");
         const b = anchor(bEl, "left");
@@ -1541,17 +1572,39 @@ function showModalStep(step){
         linesSvg.appendChild(path);
       }
 
-      // Grab cards by id
+      const hasR16 = !!document.getElementById("card_R16_1");
+
+      // R16 cards (optional)
+      const r16 = hasR16
+        ? Array.from({length:8}, (_,i)=>document.getElementById(`card_R16_${i+1}`))
+        : [];
+
+      // QF/SF/F
       const qf1 = document.getElementById("card_QF1");
       const qf2 = document.getElementById("card_QF2");
       const qf3 = document.getElementById("card_QF3");
       const qf4 = document.getElementById("card_QF4");
+
       const sf1 = document.getElementById("card_SF1");
       const sf2 = document.getElementById("card_SF2");
       const f1  = document.getElementById("card_F1");
 
-      // Winner box (target)
       const winnerBox = bracketGrid.querySelector(".winner-box");
+
+      // R16 → QF (NEW)
+      if (hasR16){
+        connect(r16[0], qf1);
+        connect(r16[1], qf1);
+
+        connect(r16[2], qf2);
+        connect(r16[3], qf2);
+
+        connect(r16[4], qf3);
+        connect(r16[5], qf3);
+
+        connect(r16[6], qf4);
+        connect(r16[7], qf4);
+      }
 
       // QF → SF
       connect(qf1, sf1);
@@ -1565,7 +1618,6 @@ function showModalStep(step){
 
       // Final → Winner
       if (f1 && winnerBox){
-        // Create a hidden anchor element on winner box left side
         connect(f1, winnerBox);
       }
     }
