@@ -111,7 +111,7 @@
     .field { flex: 1 1 240px; display:flex; flex-direction: column; gap: 6px; margin: 10px 0; }
 
     /* ✅ Inputs readable on dark card */
-    input[type="text"], input[type="email"], input[type="tel"] {
+    input[type="text"], input[type="email"], input[type="tel"], select {
       padding: 12px 12px;
       border: 1px solid rgba(255,255,255,0.22);
       border-radius: 10px;
@@ -127,12 +127,18 @@
       color: rgba(255,255,255,0.60);
     }
 
+    select option {
+      color: black;
+    }
+
     input[type="text"]:focus,
     input[type="email"]:focus,
-    input[type="tel"]:focus {
+    input[type="tel"]:focus,
+    select:focus {
       border-color: rgba(255,255,255,0.45);
       background: rgba(255,255,255,0.14);
     }
+
 
     .checks { display:flex; gap:18px; align-items:center; margin: 8px 0 0; flex-wrap: wrap; }
     .checks label { font-weight: 600; }
@@ -246,6 +252,15 @@
               <label><input type="checkbox" id="divisionMen" /> Men</label>
             </div>
             <div class="note">Select one gender.</div>
+          </div>
+
+          <div class="field">
+            <label for="skillDivision">Division Level</label>
+            <select id="skillDivision" required>
+              <option value="">Select division level</option>
+              <option value="Upper Division">Upper Division</option>
+              <option value="Lower Division">Lower Division</option>
+            </select>
           </div>
 
           <div class="field">
@@ -367,7 +382,7 @@
     // Small helper to lock/unlock the form inputs after payment starts
     function setInputsDisabled(disabled) {
       const ids = [
-        "divisionWomen","divisionMen","teamName",
+        "divisionWomen","divisionMen","skillDivision","teamName",
         "p1First","p1Last","p1Phone","p1Email",
         "p2First","p2Last","p2Phone","p2Email",
         "agreeTerms"
@@ -411,9 +426,13 @@
       // STEP 1: First click -> validate form, create PaymentIntent, mount Payment Element
       // ------------------------------------------------------------
       const division = women.checked ? "Womens" : men.checked ? "Men" : "";
+      const skillDivision = val("skillDivision");
+
       if (!division) return showError("Please select Womens or Men.");
+      if (!skillDivision) return showError("Please select Upper Division or Lower Division.");
       if (!val("teamName")) return showError("Please enter a team name.");
       if (!document.getElementById("agreeTerms").checked) return showError("You must agree to the Terms & Conditions.");
+
 
       const requiredIds = ["p1First","p1Last","p1Phone","p1Email","p2First","p2Last","p2Phone","p2Email"];
       for (const id of requiredIds) {
@@ -425,6 +444,7 @@
 
       const payload = {
         division,
+        skillDivision,
         teamName: val("teamName"),
         p1First: val("p1First"),
         p1Last: val("p1Last"),
