@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>530Volleyball | Pool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    /* NAV BAR (LOCKED HEIGHT) */
+    .navbar {
+      background: #040d6e;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      overflow: visible;
+    }
+
+    .nav-left,
+    .nav-right {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* LOGO IMAGE */
+    .logo-img {
+      height: 100px;
+      width: auto;
+      display: block;
+      margin-top: 15px;
+    }
+
+    /* NAV BUTTON STYLE */
+    .nav-btn,
+    .contact-btn {
+      background: rgba(255,255,255,0.18);
+      padding: 10px 16px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .nav-btn:hover,
+    .contact-btn:hover {
+      background: rgba(255,255,255,0.28);
+    }
+
+    .nav-btn.live-event {
+      border: 2px solid #ff2d55;
+      background: rgba(255,255,255,0.18);
+      box-shadow: 0 0 0 rgba(255,45,85,0);
+    }
+
+    .nav-btn.live-event:hover {
+      background: rgba(255,255,255,0.26);
+      box-shadow: 0 0 0 4px rgba(255,45,85,0.18);
+    }
+
+    /* HERO (same background as index) */
+    .hero {
+      min-height: calc(100vh - 100px);
+      background:
+        linear-gradient(rgba(0,0,0,0.50), rgba(0,0,0,0.50)),
+        url("Jerry.jpg") center/cover no-repeat;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 18px;
+      box-sizing: border-box;
+    }
+
+    .hero-content {
+      width: 100%;
+      max-width: 980px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      margin: 0 0 12px;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    .hero p.lead {
+      font-size: 18px;
+      line-height: 1.6;
+      opacity: 0.95;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto 22px;
+    }
+
+    /* ---- POOL PAGE (WHITE CARD + BLACK TEXT) ---- */
+    :root{
+      --border: rgba(0,0,0,0.12);
+      --mutedDark: rgba(0,0,0,0.62);
+      --shadow: 0 10px 30px rgba(0,0,0,0.18);
+      --radius: 18px;
+      --accent: #ff2d55;
+    }
+
+    .card {
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .top-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .pill {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 900;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.12);
+      color: rgba(0,0,0,0.62);
+      background: rgba(0,0,0,0.03);
+      white-space: nowrap;
+    }
+
+    .back-btn {
+      appearance: none;
+      border: 2px solid rgba(0,0,0,0.16);
+      background: #ffffff;
+      color: #0b1220;
+      font-weight: 900;
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .back-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(0,0,0,0.03);
+      border-color: rgba(0,0,0,0.30);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .subcard {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: #ffffff;
+      box-shadow: 0 10px 18px rgba(0,0,0,0.10);
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      letter-spacing: 0.3px;
+      color: #0b1220;
+    }
+
+    .muted {
+      color: var(--mutedDark);
+      line-height: 1.5;
+      margin: 6px 0 0 0;
+      font-size: 14px;
+    }
+
+    /* ===== TEAMS TABLE ===== */
+    .teams-table-wrap{
+      margin-top: 10px;
+      border: 1px solid rgba(0,0,0,0.10);
+      border-radius: 14px;
+      overflow: hidden;
+      background: rgba(0,0,0,0.02);
+    }
+
+    .teams-table{
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .teams-table thead th{
+      text-align: left;
+      padding: 10px 12px;
+      background: rgba(0,0,0,0.04);
+      border-bottom: 1px solid rgba(0,0,0,0.10);
+      color: rgba(0,0,0,0.72);
+      font-weight: 900;
+      letter-spacing: 0.2px;
+    }
+
+    .teams-table tbody td{
+      padding: 11px 12px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      font-weight: 700;
+      color: #0b1220;
+      vertical-align: middle;
+    }
+
+    .teams-table tbody tr:last-child td{
+      border-bottom: none;
+    }
+
+    .teams-table tbody tr:hover{
+      background: rgba(0,0,0,0.03);
+    }
+
+    .place-badge{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.12);
+      background: white;
+      font-weight: 900;
+      color: rgba(0,0,0,0.72);
+    }
+
+    .record-badge{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.10);
+      background: rgba(0,0,0,0.03);
+      font-weight: 900;
+      color: rgba(0,0,0,0.70);
+      float: right;
+      white-space: nowrap;
+    }
+
+    .team-name{
+      font-weight: 900;
+      color: #0b1220;
+    }
+
+    .teams-empty{
+      color: rgba(0,0,0,0.62);
+      font-weight: 700;
+    }
+
+    /* ===== Matches ===== */
+    .match-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 12px 0;
+      border-top: 1px solid rgba(0,0,0,0.08);
+    }
+    .match-row:first-of-type { border-top: none; padding-top: 0; }
+
+    .match-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 220px;
+    }
+
+    .match-title {
+      font-weight: 900;
+      color: #0b1220;
+    }
+
+    .match-teams {
+      color: rgba(0,0,0,0.70);
+      font-weight: 700;
+    }
+
+    .match-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .score-badge {
+      font-weight: 900;
+      color: rgba(0,0,0,0.70);
+      background: rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.10);
+      border-radius: 999px;
+      padding: 8px 12px;
+      white-space: nowrap;
+    }
+
+    .keep-btn {
+      display: inline-block;
+      text-decoration: none;
+      font-weight: 900;
+      text-align: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 2px solid rgba(0,0,0,0.16);
+      color: #0b1220;
+      background: #ffffff;
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+      white-space: nowrap;
+    }
+
+    .keep-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(0,0,0,0.03);
+      border-color: rgba(0,0,0,0.30);
+    }
+
+    /* ===== Round Groups (NEW + FIXED) ===== */
+    .round-group{
+      margin-top: 12px;
+      border: 1px solid black;
+      border-radius: 16px;
+      padding: 12px;
+      background: rgba(0,0,0,0.02);
+    }
+    .round-group:first-child{ margin-top: 0; }
+
+    .round-head{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .round-title{
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      color: darkred;
+    }
+
+    .round-meta{
+      font-size: 12px;
+      font-weight: 900;
+      color: rgba(0,0,0,0.55);
+      background: rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.10);
+      border-radius: 999px;
+      padding: 6px 10px;
+      white-space: nowrap;
+    }
+
+    /* Make first match row inside each round not show a top border */
+    .round-group .match-row:first-of-type{
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .error {
+      background: rgba(255,0,0,0.08);
+      border: 1px solid rgba(255,0,0,0.22);
+      color: #7f1d1d;
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    @media (max-width: 700px) {
+      .navbar {
+        height: auto;
+        padding: 12px 14px;
+        align-items: flex-start;
+        gap: 10px;
+        flex-wrap: wrap;
+        overflow: visible;
+      }
+
+      .nav-left {
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .logo-img {
+        height: 56px;
+        margin-top: 0;
+      }
+
+      .nav-btn,
+      .contact-btn {
+        padding: 8px 12px;
+        border-radius: 16px;
+        font-size: 14px;
+      }
+
+      .hero {
+        padding: 26px 14px;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .hero p.lead {
+        font-size: 16px;
+      }
+
+      .card {
+        padding: 16px;
+        border-radius: 16px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+        /* Score bubble turns green when a score exists */
+    .score-badge.is-scored{
+      background: rgba(16,185,129,0.16);   /* soft green */
+      border-color: rgba(16,185,129,0.45);
+      color: #065f46;                      /* dark green text */
+    }
+
+    /* optional: a tiny "glow" so it pops more */
+    .score-badge.is-scored{
+      box-shadow: 0 0 0 3px rgba(16,185,129,0.10);
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV BAR (same as index.html) -->
+  <div class="navbar">
+    <div class="nav-left">
+      <a href="KOB.html">
+        <img src="logo.png" alt="Logo" class="logo-img" />
+      </a>
+
+      <a href="KOB.html" class="nav-btn live-event">KING OF THE BEACH</a>
+    </div>
+  </div>
+
+  <!-- HERO BACKGROUND + POOL CONTENT -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1 id="pageTitle">KING OF THE BEACH</h1>
+      <p class="lead" id="pageLead">Loading pool data…</p>
+
+      <div class="card">
+        <div class="top-row">
+          <a class="back-btn" href="KOB.html">← Back to Live Event</a>
+        </div>
+
+        <div class="grid">
+          <!-- Teams -->
+          <div class="subcard">
+            <h2>Players</h2>
+            <div class="teams-table-wrap">
+              <table class="teams-table" aria-label="Pool standings table">
+                <thead>
+                  <tr>
+                    <th style="width: 90px;">Place</th>
+                    <th>Player</th>
+                    <th style="width: 120px; text-align:right;">Record</th>
+                  </tr>
+                </thead>
+                <tbody id="teamsList">
+                  <tr>
+                    <td><span class="place-badge">—</span></td>
+                    <td class="team-name">Loading…</td>
+                    <td style="text-align:right;"><span class="record-badge">—</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Matches -->
+          <div class="subcard">
+            <h2>Matches</h2>
+            <p class="muted">Click “Keep Score” to open the scorekeeper.</p>
+
+            <div id="matchesWrap">
+              <div class="match-row">
+                <div class="match-left">
+                  <div class="match-title">Loading…</div>
+                  <div class="match-teams">Please wait</div>
+                </div>
+                <div class="match-actions">
+                  <span class="score-badge">—</span>
+                  <a class="keep-btn" href="#">Keep Score</a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="error" id="errorBox"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyjFKxKdKWqqhVuP-kb7Idqw38W2DIuFaVn5Yh1dWvVnb_U20xV-0wPGEZYY1W0Rg/exec";
+
+    const TOURNAMENT = "KOB";
+
+    const pageLead = document.getElementById("pageLead");
+    const matchesWrap = document.getElementById("matchesWrap");
+    const teamsList = document.getElementById("teamsList");
+    const errorBox = document.getElementById("errorBox");
+
+
+
+
+    function showError(msg) {
+    errorBox.style.display = "block";
+    errorBox.textContent = msg;
+  }
+
+    async function fetchJSON(url) {
+    const res = await fetch(url);
+    return await res.json();
+  }
+
+    function scoreText(match) {
+    if (!match.score || match.score.set1A === "" || match.score.set1B === "") {
+    return "No score";
+  }
+
+    return `${match.score.set1A} - ${match.score.set1B}`;
+  }
+
+    function scoreClass(match) {
+    if (!match.score || match.score.set1A === "" || match.score.set1B === "") {
+    return "score-badge";
+  }
+
+    return "score-badge is-scored";
+  }
+
+    function groupMatchesByRound(matches) {
+    const groups = {};
+
+    matches.forEach(match => {
+    const roundNo = match.roundNo || "Unassigned";
+
+    if (!groups[roundNo]) {
+    groups[roundNo] = [];
+  }
+
+    groups[roundNo].push(match);
+  });
+
+    return groups;
+  }
+
+
+
+    function renderStandings(standings) {
+      if (!standings.length) {
+        teamsList.innerHTML = `
+          <tr>
+            <td colspan="3" class="teams-empty">No players found.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      teamsList.innerHTML = standings.map(row => {
+        return `
+          <tr>
+            <td><span class="place-badge">${row.place}</span></td>
+            <td class="team-name">${row.player}</td>
+            <td style="text-align:right;">
+              <span class="record-badge">${row.record}</span>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+
+    async function loadStandings() {
+      try {
+        const url = `${WEB_APP_URL}?action=getStandings&tournament=${encodeURIComponent(TOURNAMENT)}`;
+        const resp = await fetchJSON(url);
+
+        if (!resp.ok) {
+          showError(resp.error || "Could not load standings.");
+          return;
+        }
+
+        renderStandings(resp.standings || []);
+
+      } catch (err) {
+        showError("Could not load standings.");
+      }
+    }
+
+    function renderMatches(matches) {
+    if (!matches.length) {
+    matchesWrap.innerHTML = `
+      <p class="muted">No matches found yet.</p>
+    `;
+    return;
+  }
+
+    const groups = groupMatchesByRound(matches);
+
+    const sortedRoundNumbers = Object.keys(groups).sort((a, b) => {
+    return Number(a) - Number(b);
+  });
+
+    matchesWrap.innerHTML = sortedRoundNumbers.map(roundNo => {
+    const roundMatches = groups[roundNo];
+
+    const rowsHTML = roundMatches.map(match => {
+    const teamA = match.teamA || `${match.PlayerA} / ${match.PlayerB}`;
+    const teamB = match.teamB || `${match.PlayerC} / ${match.PlayerD}`;
+
+    return `
+        <div class="match-row">
+          <div class="match-left">
+            <div class="match-title">
+              Match ${match.matchNo || match.matchId}
+            </div>
+            <div class="match-teams">
+              ${teamA} vs ${teamB}
+            </div>
+          </div>
+
+          <div class="match-actions">
+            <span class="${scoreClass(match)}">${scoreText(match)}</span>
+            <a class="keep-btn" href="kobscore.html?matchId=${encodeURIComponent(match.matchId)}">
+              Keep Score
+            </a>
+          </div>
+        </div>
+      `;
+  }).join("");
+
+    return `
+      <div class="round-group">
+        <div class="round-head">
+          <div class="round-title">Round ${roundNo}</div>
+          <div class="round-meta">${roundMatches.length} matches</div>
+        </div>
+
+        ${rowsHTML}
+      </div>
+    `;
+  }).join("");
+  }
+
+    async function loadMatches() {
+    try {
+    pageLead.textContent = "Loading matches…";
+
+    const url = `${WEB_APP_URL}?action=getMatches&tournament=${encodeURIComponent(TOURNAMENT)}`;
+    const resp = await fetchJSON(url);
+
+    if (!resp.ok) {
+    showError(resp.error || "Could not load matches.");
+    pageLead.textContent = "Could not load matches.";
+    return;
+  }
+
+    renderMatches(resp.matches || []);
+
+    pageLead.textContent = `${TOURNAMENT} matches are live.`;
+
+  } catch (err) {
+    showError("Could not reach backend. Check your WEB_APP_URL and Apps Script deployment.");
+    pageLead.textContent = "Could not load matches.";
+  }
+  }
+
+    loadStandings();
+    loadMatches();
+</script>
