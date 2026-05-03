@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>530Volleyball | Scorekeeper</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; color:white; }
+
+    .navbar {
+      background: #040d6e;
+      height: 100px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      padding: 0 28px;
+      overflow: visible;
+    }
+
+    .nav-left { display:flex; gap:18px; align-items:center; }
+    .navbar a { color:white; text-decoration:none; font-weight:600; letter-spacing:0.5px; }
+
+    .logo-img { height:100px; width:auto; display:block; margin-top:15px; }
+
+    .nav-btn, .contact-btn {
+      background: rgba(255,255,255,0.18);
+      padding: 10px 16px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .nav-btn:hover, .contact-btn:hover { background: rgba(255,255,255,0.28); }
+
+    /* Make LIVE EVENT stand out (red border) */
+    .nav-btn.live-event {
+      border: 2px solid #ff2d55;
+      background: rgba(255,255,255,0.18);
+      box-shadow: 0 0 0 rgba(255,45,85,0);
+    }
+
+    .nav-btn.live-event:hover {
+      background: rgba(255,255,255,0.26);
+      box-shadow: 0 0 0 4px rgba(255,45,85,0.18);
+    }
+
+    .hero {
+      min-height: calc(100vh - 100px);
+      background:
+        linear-gradient(rgba(0,0,0,0.50), rgba(0,0,0,0.50)),
+        url("Jerry.jpg") center/cover no-repeat;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding: 40px 18px;
+      box-sizing:border-box;
+    }
+
+    .hero-content { width:100%; max-width: 780px; }
+    .hero h1 { font-size: 34px; margin: 0 0 10px; text-align:center; letter-spacing:1px; }
+    .hero p.lead { font-size: 16px; line-height: 1.6; opacity:0.95; text-align:center; margin: 0 auto 20px; max-width: 720px; }
+
+    :root{
+      --border: rgba(0,0,0,0.12);
+      --mutedDark: rgba(0,0,0,0.62);
+      --shadow: 0 10px 30px rgba(0,0,0,0.18);
+      --radius: 18px;
+    }
+
+    .card {
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .top-row{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .pill{
+      display:inline-block;
+      font-size: 12px;
+      font-weight: 900;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.12);
+      color: rgba(0,0,0,0.62);
+      background: rgba(0,0,0,0.03);
+      white-space: nowrap;
+    }
+
+    .back-btn{
+      border: 2px solid rgba(0,0,0,0.16);
+      background: #ffffff;
+      color: #0b1220;
+      font-weight: 900;
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+      text-decoration:none;
+      display:inline-block;
+    }
+
+    .back-btn:hover { transform: translateY(-1px); background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.30); }
+
+    .score-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .team-box{
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 16px;
+      padding: 14px;
+      background: rgba(0,0,0,0.02);
+      text-align:center;
+    }
+
+    .team-name{
+      font-weight: 900;
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #0b1220;
+    }
+
+    .score-num{
+      font-size: 46px;
+      font-weight: 1000;
+      letter-spacing: 1px;
+      margin: 6px 0 10px;
+      color: #0b1220;
+    }
+
+    /* make the big score look the same but be typeable */
+    .score-input{
+      width: 100%;
+      border: none;
+      background: transparent;
+      text-align: center;
+      outline: none;
+      appearance: textfield;
+      padding: 0;
+    }
+    .score-input::-webkit-outer-spin-button,
+    .score-input::-webkit-inner-spin-button{
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .btn-row{
+      display:flex;
+      justify-content:center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .score-btn{
+      width: 54px;
+      height: 44px;
+      border-radius: 12px;
+      border: 2px solid rgba(0,0,0,0.16);
+      background: #fff;
+      font-weight: 1000;
+      font-size: 18px;
+      cursor:pointer;
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+
+    .score-btn:hover{
+      transform: translateY(-1px);
+      background: rgba(0,0,0,0.03);
+      border-color: rgba(0,0,0,0.30);
+    }
+
+    .bottom-row{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: nowrap;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .status{
+      flex: 1;
+      min-width: 0;
+      color: rgba(0,0,0,0.65);
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .submit-btn{
+      border: none;
+      background: #0b1220;
+      color: white;
+      font-weight: 1000;
+      padding: 12px 16px;
+      border-radius: 999px;
+      cursor:pointer;
+    }
+
+    .submit-btn:hover{ background:#050a14; }
+
+    .error{
+      background: rgba(255,0,0,0.08);
+      border: 1px solid rgba(255,0,0,0.22);
+      color: #7f1d1d;
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-top: 12px;
+      display:none;
+    }
+
+    /* ✅ NEW: small set label */
+    .set-label{
+      font-weight: 900;
+      color: rgba(0,0,0,0.55);
+      font-size: 12px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      margin: 8px 0 -2px;
+    }
+
+    @media (max-width: 700px){
+      .navbar { height:auto; padding: 12px 14px; align-items:flex-start; gap:10px; flex-wrap:wrap; }
+      .nav-left { flex-wrap: wrap; gap:10px; align-items:center; }
+      .logo-img { height:56px; margin-top:0; }
+      .nav-btn, .contact-btn { padding: 8px 12px; border-radius: 16px; font-size: 14px; }
+      .hero { padding: 26px 14px; }
+      .score-grid { grid-template-columns: 1fr; }
+      .bottom-row{flex-wrap: nowrap;}
+      .status{font-size: 13px;}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="nav-left">
+      <a href="KOB.html"><img src="logo.png" alt="Logo" class="logo-img" /></a>
+      <a href="KOB.html" class="nav-btn live-event">KING OF THE BEACH</a>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-content">
+      <h1>SCOREKEEPER</h1>
+      <p class="lead" id="leadText">Loading match…</p>
+
+      <div class="card">
+        <div class="top-row">
+          <span class="pill" id="matchPill">Match</span>
+          <a class="back-btn" id="backLink" href="KOB.html">← Back</a>
+        </div>
+
+        <div class="score-grid">
+          <!-- =======================
+               TEAM A (FIXED LAYOUT)
+               ======================= -->
+          <div class="team-box">
+            <div class="team-name" id="teamAName">Team A</div>
+
+            <!-- SET 1 WRAP -->
+            <div id="set1WrapA">
+              <div class="set-label" id="set1LabelA">Set 1</div>
+              <input class="score-num score-input" id="set1A" type="number" inputmode="numeric" min="0" value="0" />
+            </div>
+
+            <!-- SET 2 WRAP (hidden unless setsPerMatch === 2 and step===2) -->
+            <div id="set2WrapA" style="display:none;">
+              <div class="set-label">Set 2</div>
+              <input class="score-num score-input" id="set2A" type="number" inputmode="numeric" min="0" value="0" />
+            </div>
+
+            <!-- ✅ Buttons always below whichever set is visible -->
+            <div class="btn-row">
+              <button class="score-btn" id="aMinus" type="button">−</button>
+              <button class="score-btn" id="aPlus" type="button">+</button>
+            </div>
+          </div>
+
+          <!-- =======================
+               TEAM B (FIXED LAYOUT)
+               ======================= -->
+          <div class="team-box">
+            <div class="team-name" id="teamBName">Team B</div>
+
+            <!-- SET 1 WRAP -->
+            <div id="set1WrapB">
+              <div class="set-label" id="set1LabelB">Set 1</div>
+              <input class="score-num score-input" id="set1B" type="number" inputmode="numeric" min="0" value="0" />
+            </div>
+
+            <!-- SET 2 WRAP -->
+            <div id="set2WrapB" style="display:none;">
+              <div class="set-label">Set 2</div>
+              <input class="score-num score-input" id="set2B" type="number" inputmode="numeric" min="0" value="0" />
+            </div>
+
+            <!-- ✅ Buttons always below whichever set is visible -->
+            <div class="btn-row">
+              <button class="score-btn" id="bMinus" type="button">−</button>
+              <button class="score-btn" id="bPlus" type="button">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom-row">
+          <div class="status" id="statusText">Tip: tap + / − while reffing, or tap the score to type it.</div>
+          <button class="submit-btn" id="submitBtn" type="button">Submit Score</button>
+        </div>
+
+        <div class="error" id="errorBox"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyjFKxKdKWqqhVuP-kb7Idqw38W2DIuFaVn5Yh1dWvVnb_U20xV-0wPGEZYY1W0Rg/exec";
+
+    const params = new URLSearchParams(window.location.search);
+    const matchId = (params.get("matchId") || "").trim();
+
+    const leadText = document.getElementById("leadText");
+    const matchPill = document.getElementById("matchPill");
+    const backLink = document.getElementById("backLink");
+
+    const teamANameEl = document.getElementById("teamAName");
+    const teamBNameEl = document.getElementById("teamBName");
+
+    // ✅ set inputs
+    const set1AEl = document.getElementById("set1A");
+    const set1BEl = document.getElementById("set1B");
+    const set2AEl = document.getElementById("set2A");
+    const set2BEl = document.getElementById("set2B");
+
+    // ✅ NEW: wraps for set switching
+    const set1WrapA = document.getElementById("set1WrapA");
+    const set1WrapB = document.getElementById("set1WrapB");
+    const set2WrapA = document.getElementById("set2WrapA");
+    const set2WrapB = document.getElementById("set2WrapB");
+
+    const statusText = document.getElementById("statusText");
+    const errorBox = document.getElementById("errorBox");
+
+    const submitBtn = document.getElementById("submitBtn");
+    const aMinus = document.getElementById("aMinus");
+    const aPlus = document.getElementById("aPlus");
+    const bMinus = document.getElementById("bMinus");
+    const bPlus = document.getElementById("bPlus");
+
+    let match = null;
+
+    // ✅ NEW state: sets + step flow
+    let setsPerMatch = 1;
+    let setStep = 1; // 1 = Set 1 screen, 2 = Set 2 screen (only if setsPerMatch === 2)
+
+    let set1A = 0, set1B = 0;
+    let set2A = 0, set2B = 0;
+
+    function showError(msg){
+      errorBox.style.display = "block";
+      errorBox.textContent = msg;
+    }
+
+    function clamp(n){ return Math.max(0, n); }
+
+    function setInputsFromState(){
+      set1AEl.value = String(set1A);
+      set1BEl.value = String(set1B);
+      set2AEl.value = String(set2A);
+      set2BEl.value = String(set2B);
+    }
+
+    function readTypedIntoState(){
+      set1A = clamp(Number(set1AEl.value || 0));
+      set1B = clamp(Number(set1BEl.value || 0));
+      set2A = clamp(Number(set2AEl.value || 0));
+      set2B = clamp(Number(set2BEl.value || 0));
+      setInputsFromState();
+    }
+
+    // ✅ show ONLY one set at a time for 2-set matches
+    // ✅ buttons stay below because they are outside the wraps
+    function applySetStepUI(){
+      const twoSets = (Number(setsPerMatch) === 2);
+
+      if (!twoSets) {
+        setStep = 1;
+        set1WrapA.style.display = "block";
+        set1WrapB.style.display = "block";
+        set2WrapA.style.display = "none";
+        set2WrapB.style.display = "none";
+
+        submitBtn.textContent = "Submit Score";
+        statusText.textContent = "1 set: tap +/− while reffing, or tap the score to type it.";
+        return;
+      }
+
+      if (setStep === 1) {
+        set1WrapA.style.display = "block";
+        set1WrapB.style.display = "block";
+        set2WrapA.style.display = "none";
+        set2WrapB.style.display = "none";
+
+        submitBtn.textContent = "Next Set";
+        statusText.textContent = "Set 1: enter the score, then tap Next Set.";
+      } else {
+        set1WrapA.style.display = "none";
+        set1WrapB.style.display = "none";
+        set2WrapA.style.display = "block";
+        set2WrapB.style.display = "block";
+
+        submitBtn.textContent = "Submit Score";
+        statusText.textContent = "Set 2: enter the score, then Submit Score.";
+
+        setTimeout(() => { try { set2AEl.focus(); } catch(e){} }, 50);
+      }
+    }
+
+    async function fetchJSON(url){
+      const res = await fetch(url);
+      return await res.json();
+    }
+
+    async function postJSON(url, data){
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(data)
+      });
+      return await res.json();
+    }
+
+    async function loadMatch(){
+      if(!matchId){
+        showError("Missing matchId in URL. Example: score.html?matchId=KOB-P1-M1");
+        leadText.textContent = "Missing matchId.";
+        return;
+      }
+
+      const matchURL = `${WEB_APP_URL}?action=getMatch&matchId=${encodeURIComponent(matchId)}`;
+      const scoreURL = `${WEB_APP_URL}?action=getScore&matchId=${encodeURIComponent(matchId)}`;
+
+      const matchResp = await fetchJSON(matchURL);
+      if(!matchResp.ok){
+        showError(matchResp.error || "Could not load match.");
+        leadText.textContent = "Could not load match.";
+        return;
+      }
+
+      match = matchResp.match;
+
+      // ✅ setsPerMatch from backend (default 1)
+      setsPerMatch = Number(match.setsPerMatch || 1);
+      if (setsPerMatch !== 2) setsPerMatch = 1;
+
+      // ✅ Always start on Set 1 screen
+      setStep = 1;
+      applySetStepUI();
+
+      matchPill.textContent = `${match.tournament.toUpperCase()} • Pool ${match.pool} • Match ${match.matchNo}`;
+      leadText.textContent = `${match.teamA} vs ${match.teamB}`;
+      teamANameEl.textContent = match.teamA;
+      teamBNameEl.textContent = match.teamB;
+
+      backLink.href = `KOB.html`;
+
+      const scoreResp = await fetchJSON(scoreURL);
+
+      if(scoreResp.ok && scoreResp.score){
+        const s = scoreResp.score;
+
+        // Prefer new fields; fall back to old (scoreA/scoreB) into set1
+        set1A = clamp(Number(s.set1A != null ? s.set1A : (s.scoreA || 0)));
+        set1B = clamp(Number(s.set1B != null ? s.set1B : (s.scoreB || 0)));
+
+        set2A = clamp(Number(s.set2A != null ? s.set2A : 0));
+        set2B = clamp(Number(s.set2B != null ? s.set2B : 0));
+
+        // If score row has setsPerMatch, respect it, else keep match setting
+        const spmFromRow = Number(s.setsPerMatch || 0);
+        if (spmFromRow === 2) setsPerMatch = 2;
+        if (spmFromRow === 1) setsPerMatch = 1;
+
+        // Keep starting at Set 1 screen
+        setStep = 1;
+        applySetStepUI();
+        setInputsFromState();
+
+        statusText.textContent = "Loaded saved score. Edit Set 1, then Next Set.";
+      } else {
+        setInputsFromState();
+      }
+    }
+
+    // Keep state synced when typing
+    [set1AEl, set1BEl, set2AEl, set2BEl].forEach(el => {
+      el.addEventListener("input", () => { readTypedIntoState(); });
+      el.addEventListener("focus", () => {
+        statusText.textContent = (Number(setsPerMatch) === 2)
+          ? (setStep === 1 ? "Set 1: type the scores, then Next Set." : "Set 2: type the scores, then Submit Score.")
+          : "Manual entry: type the scores, then Submit.";
+      });
+    });
+
+    // ✅ +/− now edits the CURRENT SCREEN'S SET
+    aPlus.addEventListener("click", () => {
+      readTypedIntoState();
+      if (Number(setsPerMatch) === 2 && setStep === 2) set2A++;
+      else set1A++;
+      setInputsFromState();
+    });
+
+    aMinus.addEventListener("click", () => {
+      readTypedIntoState();
+      if (Number(setsPerMatch) === 2 && setStep === 2) set2A = clamp(set2A - 1);
+      else set1A = clamp(set1A - 1);
+      setInputsFromState();
+    });
+
+    bPlus.addEventListener("click", () => {
+      readTypedIntoState();
+      if (Number(setsPerMatch) === 2 && setStep === 2) set2B++;
+      else set1B++;
+      setInputsFromState();
+    });
+
+    bMinus.addEventListener("click", () => {
+      readTypedIntoState();
+      if (Number(setsPerMatch) === 2 && setStep === 2) set2B = clamp(set2B - 1);
+      else set1B = clamp(set1B - 1);
+      setInputsFromState();
+    });
+
+    async function submitScoreToBackend_(){
+      if(!match) return;
+
+      readTypedIntoState();
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Saving…";
+      statusText.textContent = "Saving score…";
+
+      const payload = {
+        action: "saveScore",
+        payload: {
+          matchId: match.matchId,
+          tournament: match.tournament,
+          pool: match.pool,
+          matchNo: match.matchNo,
+          teamA: match.teamA,
+          teamB: match.teamB,
+
+          setsPerMatch: setsPerMatch,
+          set1A: set1A,
+          set1B: set1B,
+          set2A: (Number(setsPerMatch) === 2 ? set2A : null),
+          set2B: (Number(setsPerMatch) === 2 ? set2B : null)
+        }
+      };
+
+      try{
+        const resp = await postJSON(WEB_APP_URL, payload);
+        if(!resp.ok){
+          showError(resp.error || "Could not save score.");
+          statusText.textContent = "Save failed.";
+        } else {
+          statusText.textContent = `Saved. Winner: ${resp.winner}`;
+          setTimeout(() => { window.location.href = backLink.href; }, 650);
+        }
+      } catch(e){
+        showError("Could not reach backend while saving. Check deployment.");
+        statusText.textContent = "Save failed.";
+      } finally{
+        submitBtn.disabled = false;
+        applySetStepUI();
+      }
+    }
+
+    // ✅ Button now acts as: Next Set -> Submit Score (only for 2 sets)
+    submitBtn.addEventListener("click", async () => {
+      if(!match) return;
+
+      readTypedIntoState();
+
+      if (Number(setsPerMatch) === 2 && setStep === 1) {
+        setStep = 2;
+        applySetStepUI();
+        return;
+      }
+
+      await submitScoreToBackend_();
+    });
+
+    loadMatch();
+  </script>
+</body>
+</html>
