@@ -247,6 +247,25 @@
       color: rgba(0,0,0,0.72);
     }
 
+
+    .place-badge.gold{
+      background: #ffd700;
+      border-color: #d4af37;
+      color: #3a2a00;
+    }
+
+    .place-badge.silver{
+      background: #c0c0c0;
+      border-color: #a8a8a8;
+      color: #222222;
+    }
+
+    .place-badge.bronze{
+      background: #cd7f32;
+      border-color: #a86424;
+      color: white;
+    }
+
     .record-badge{
       display: inline-flex;
       align-items: center;
@@ -487,9 +506,10 @@
               <table class="teams-table" aria-label="Pool standings table">
                 <thead>
                   <tr>
-                    <th style="width: 90px;">Place</th>
+                    <th style="width: 80px;">Place</th>
                     <th>Player</th>
-                    <th style="width: 120px; text-align:right;">Record</th>
+                    <th style="width: 100px; text-align:right;">Record</th>
+                    <th style="width: 90px; text-align:right;">Diff</th>
                   </tr>
                 </thead>
                 <tbody id="teamsList">
@@ -585,29 +605,41 @@
   }
 
 
+function getPlaceClass(place) {
+  if (Number(place) === 1) return "gold";
+  if (Number(place) === 2) return "silver";
+  if (Number(place) === 3) return "bronze";
+  return "";
+}
 
-    function renderStandings(standings) {
-      if (!standings.length) {
-        teamsList.innerHTML = `
-          <tr>
-            <td colspan="3" class="teams-empty">No players found.</td>
-          </tr>
-        `;
-        return;
-      }
+function renderStandings(standings) {
+  if (!standings.length) {
+    teamsList.innerHTML = `
+      <tr>
+        <td colspan="4" class="teams-empty">No players found.</td>
+      </tr>
+    `;
+    return;
+  }
 
-      teamsList.innerHTML = standings.map(row => {
-        return `
-          <tr>
-            <td><span class="place-badge">${row.place}</span></td>
-            <td class="team-name">${row.player}</td>
-            <td style="text-align:right;">
-              <span class="record-badge">${row.record}</span>
-            </td>
-          </tr>
-        `;
-      }).join("");
-    }
+  teamsList.innerHTML = standings.map(row => {
+    const placeClass = getPlaceClass(row.place);
+    const diff = row.pointDiffDisplay || "0";
+
+    return `
+      <tr>
+        <td><span class="place-badge ${placeClass}">${row.place}</span></td>
+        <td class="team-name">${row.player}</td>
+        <td style="text-align:right;">
+          <span class="record-badge">${row.record}</span>
+        </td>
+        <td style="text-align:right;">
+          <span class="record-badge">${diff}</span>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
 
 
     async function loadStandings() {
