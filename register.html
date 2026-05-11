@@ -249,19 +249,10 @@
             <label>Gender</label>
             <div class="checks">
               <label><input type="checkbox" id="divisionWomen" /> Womens</label>
-              <label><input type="checkbox" id="divisionMen" /> Men</label>
             </div>
-            <div class="note">Select one gender.</div>
+            <div class="note">Women only.</div>
           </div>
 
-          <div class="field">
-            <label for="skillDivision">Division Level</label>
-            <select id="skillDivision" required>
-              <option value="">Select division level</option>
-              <option value="Upper Division">Upper Division</option>
-              <option value="Lower Division">Lower Division</option>
-            </select>
-          </div>
 
           <div class="field">
             <label for="teamName">Team Name</label>
@@ -338,10 +329,6 @@
   <script>
     // Only one division checkbox at a time
     const women = document.getElementById("divisionWomen");
-    const men = document.getElementById("divisionMen");
-    women.addEventListener("change", () => { if (women.checked) men.checked = false; });
-    men.addEventListener("change", () => { if (men.checked) women.checked = false; });
-
     // ✅ Your Apps Script Web App URL
     const scriptURL = "https://script.google.com/macros/s/AKfycbwYxZH7UAUUd96KhxPqvMf6XCEYc5s0_2hkVQcZs74bCar53vWDrNQ35_E5NtTL40ORuA/exec";
 
@@ -382,7 +369,7 @@
     // Small helper to lock/unlock the form inputs after payment starts
     function setInputsDisabled(disabled) {
       const ids = [
-        "divisionWomen","divisionMen","skillDivision","teamName",
+        "divisionWomen","teamName",
         "p1First","p1Last","p1Phone","p1Email",
         "p2First","p2Last","p2Phone","p2Email",
         "agreeTerms"
@@ -425,11 +412,9 @@
       // ------------------------------------------------------------
       // STEP 1: First click -> validate form, create PaymentIntent, mount Payment Element
       // ------------------------------------------------------------
-      const division = women.checked ? "Womens" : men.checked ? "Men" : "";
-      const skillDivision = val("skillDivision");
+      const division = women.checked ? "Womens" : "";
 
-      if (!division) return showError("Please select Womens or Men.");
-      if (!skillDivision) return showError("Please select Upper Division or Lower Division.");
+      if (!division) return showError("Please select Womens");
       if (!val("teamName")) return showError("Please enter a team name.");
       if (!document.getElementById("agreeTerms").checked) return showError("You must agree to the Terms & Conditions.");
 
@@ -444,7 +429,6 @@
 
       const payload = {
         division,
-        skillDivision,
         teamName: val("teamName"),
         p1First: val("p1First"),
         p1Last: val("p1Last"),
