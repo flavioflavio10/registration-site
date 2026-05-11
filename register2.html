@@ -247,19 +247,11 @@
           <div class="field">
             <label>Tournament</label>
             <div class="checks">
-              <label><input type="checkbox" id="divisionReverseCoed" /> Reverse Coed Doubles</label>
+              <label><input type="checkbox" id="divisionReverseCoed" /> Men</label>
             </div>
             <div class="note">Select the format.</div>
           </div>
 
-          <div class="field">
-            <label for="skillDivision">Division Level</label>
-            <select id="skillDivision" required>
-              <option value="">Select division level</option>
-              <option value="Upper Division">Upper Division</option>
-              <option value="Lower Division">Lower Division</option>
-            </select>
-          </div>
 
           <div class="field">
             <label for="teamName">Team Name</label>
@@ -374,7 +366,7 @@
     // Small helper to lock/unlock the form inputs after payment starts
     function setInputsDisabled(disabled) {
       const ids = [
-        "divisionReverseCoed","skillDivision","teamName",
+        "divisionReverseCoed","teamName",
         "p1First","p1Last","p1Phone","p1Email",
         "p2First","p2Last","p2Phone","p2Email",
         "agreeTerms"
@@ -415,10 +407,8 @@
       // STEP 1: First click -> validate form, create PaymentIntent, mount Payment Element
       // ------------------------------------------------------------
       const division = reverseCoed.checked ? "Reverse Coed Doubles" : "";
-      const skillDivision = val("skillDivision");
 
-      if (!division) return showError("Please select Reverse Coed Doubles.");
-      if (!skillDivision) return showError("Please select Upper Division or Lower Division.");
+      if (!division) return showError("Please select Men.");
       if (!val("teamName")) return showError("Please enter a team name.");
       if (!document.getElementById("agreeTerms").checked) return showError("You must agree to the Terms & Conditions.");
 
@@ -432,7 +422,6 @@
 
       const payload = {
         division,
-        skillDivision,
         teamName: val("teamName"),
         p1First: val("p1First"),
         p1Last: val("p1Last"),
