@@ -325,8 +325,11 @@
 
       if (!data.ok) throw new Error(data.error || "API returned ok:false");
 
-      document.getElementById("menCount").textContent = data.men ?? 0;
-      document.getElementById("womenCount").textContent = data.women ?? 0;
+      const womenEl = document.getElementById("womenCount");
+      
+      if (womenEl) {
+        womenEl.textContent = data.women ?? 0;
+      }
     } catch (err) {
       console.error("Failed to load registration counts:", err);
       // leave defaults if it fails
