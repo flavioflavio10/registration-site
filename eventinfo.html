@@ -209,6 +209,21 @@
         font-size: 14px;
       }
 
+
+      .teams-link {
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        text-decoration: underline;
+        opacity: 0.9;
+      }
+
+      .teams-link:hover {
+        opacity: 1;
+      }
+
+
+
       .hero {
         padding: 26px 14px;
       }
@@ -295,6 +310,7 @@
               <button class="hero-btn" disabled>
                 TOURNAMENT FULL
               </button>
+              <a href="participants.html" class="teams-link">View Registered Teams</a>
             </div>
 
         </div>
@@ -325,7 +341,7 @@
       if (!data.ok) throw new Error(data.error || "API returned ok:false");
 
       const womenEl = document.getElementById("womenCount");
-      
+
       if (womenEl) {
         womenEl.textContent = data.women ?? 0;
       }
